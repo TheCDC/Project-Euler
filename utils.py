@@ -62,7 +62,7 @@ def nthDigit(n, d, base=10):
     return (n % (base**(d + 1))) // (base**(d))
 
 
-def numDigits(n, base):
+def numDigits(n, base=10):
     """Get the number of digits of n in base base."""
     if n == 0:
         return 1
@@ -80,8 +80,19 @@ def fact(n):
         p *= n
     return p
 
+def fib(n):
+    if n == 1 or n == 2:
+        return 1
+    a,b = 1,1
+    i = 2
+    while i < n:
+        a,b = b, a+b
+        i += 1
+    return b
+
 def main():
-    print(fact(10))
+    # print(fact(10))
+    print(fib(20))
     # ns = [1, 3, 6, 10, 15, 21, 28] + list(range(1000, 2000)) + [34283340]
     # pprint.pprint([(i, len(divisors(i)), numDivisors(i), (primeFactors(i)))
     #                for i in ns])

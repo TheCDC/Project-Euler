@@ -10,4 +10,4 @@ while len(found) < 4:
 	else:
 		found = []
 
-print(found)
+print(found[0])

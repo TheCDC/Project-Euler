@@ -6,6 +6,6 @@ s = 0
 while i < 1000000:
 	if test(i):
 		s += i
-		print(i)
+		# print(i)
 	i+= 1
 print(s)

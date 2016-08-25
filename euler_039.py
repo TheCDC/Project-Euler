@@ -18,7 +18,7 @@ biggest = num_solutions(1000)
 for i in range(1000,0,-2):
 	a = num_solutions(i)
 	if a > biggest:
-		print("New biggest:",a,"at i =",i)
+		# print("New biggest:",a,"at i =",i)
 		biggest = a
-print(a,i)
+print(biggest)
 # ss = [num_solutions(i) for i in range(1000,0,-1)]

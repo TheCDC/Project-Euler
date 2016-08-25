@@ -29,9 +29,9 @@ def test(n):
     a = tn(n)
     return np(a) % 1 == 0 and nh(a) % 1 == 0
 
-print([nt(i) for i in [1, 3, 6, 10]])
-print([np(i) for i in [1, 5, 12, 22]])
-print([nh(i) for i in [1, 6, 15, 28]])
+# print([nt(i) for i in [1, 3, 6, 10]])
+# print([np(i) for i in [1, 5, 12, 22]])
+# print([nh(i) for i in [1, 6, 15, 28]])
 
 
 def main():
@@ -41,6 +41,7 @@ def main():
         i += 1
         if i % 1000000 == 0:
             print("At:", i, tn(i))
-    print(i, tn(i))
+    # print(i, tn(i))
+    print(i)
 if __name__ == '__main__':
     main()

@@ -62,7 +62,7 @@ def nthDigit(n, d, base=10):
     return (n % (base**(d + 1))) // (base**(d))
 
 
-def numDigits(n, base):
+def numDigits(n, base=10):
     """Get the number of digits of n in base base."""
     if n == 0:
         return 1
@@ -71,7 +71,7 @@ def numDigits(n, base):
     if base == 1:
         return n
 
-    return math.floor(math.log(n) / math.log(base))
+    return math.floor(math.log(n) / math.log(base)) + 1
 
 
 def numrepr(n, base):

@@ -6,10 +6,16 @@ def ds(n):
 	# print(s)
 	return s
 def main():
-	# find the upper bound
-	i = 3
-	while ds(i) <= i:
-		i += 1
-	print(ds(i))
+	# find the upper bound of number of digits
+	nd = 1
+	n = 2
+	while n < ds(n):
+		nd += 1
+		n = int("9"*nd)
+	while n != ds(n):
+		n -= 1
+	print("Upper (inclusive):",n)
+	# don't include 1
+	print(sum([i for i in range(2,n+1) if i == ds(i)]))
 if __name__ == '__main__':
 	main()

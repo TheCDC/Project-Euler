@@ -71,7 +71,7 @@ def numDigits(n, base=10):
     if base == 1:
         return n
 
-    return math.floor(math.log(n) / math.log(base)) + 1
+    return math.ceil(math.log(n) / math.log(base))
 
 
 def numrepr(n, base):

@@ -11,7 +11,7 @@ def num_solutions(n):
 	return ns
 
 testn = num_solutions(120)
-print(testn)
+# print(testn)
 assert num_solutions(120) == 3
 
 biggest = num_solutions(1000)

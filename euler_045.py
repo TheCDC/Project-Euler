@@ -39,8 +39,8 @@ def main():
     i = start + 1
     while not test(i):
         i += 1
-        if i % 1000000 == 0:
-            print("At:", i, tn(i))
+        # if i % 1000000 == 0:
+        #     print("At:", i, tn(i))
     # print(i, tn(i))
     print(i)
 if __name__ == '__main__':

@@ -19,9 +19,15 @@ def isPrime(n):
     """Return whether a number is prime."""
     if n == 2:
         return True
-    for i in range(2, int(n**(1 / 2)) + 1):
-        if n % i == 0:
-            return False
+    elif n == 1:
+        return False
+    try:
+        for i in range(2, int(n**(1 / 2)) + 1):
+            if n % i == 0:
+                return False
+    except Exception as e:
+        print(e,n)
+        raise e
     return True
 
 
@@ -92,10 +98,11 @@ def fact(n):
 
 
 def main():
-    for n in range(2, 10):
-        for b in [2, 5, 8, 10]:
-            print(numrepr(n, b), end=' ')
-        print()
+    print(isPrime(3))
+    # for n in range(2, 10):
+    #     for b in [2, 5, 8, 10]:
+    #         print(numrepr(n, b), end=' ')
+    #     print()
     # print(fact(10))
     # ns = [1, 3, 6, 10, 15, 21, 28] + list(range(1000, 2000)) + [34283340]
     # pprint.pprint([(i, len(divisors(i)), numDivisors(i), (primeFactors(i)))

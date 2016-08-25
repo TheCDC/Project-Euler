@@ -51,9 +51,9 @@ def numDivisors(n):
 def divisors(n):
     """Get all divisors of a number."""
     l = []
-    for i in range(1, int(n//2)):
+    for i in range(1, int(n // 2)):
         if n % i == 0:
-            l.extend([n, i/n])
+            l.extend([n, i / n])
     return l
 
 
@@ -62,7 +62,7 @@ def nthDigit(n, d, base=10):
     return (n % (base**(d + 1))) // (base**(d))
 
 
-def numDigits(n, base=10):
+def numDigits(n, base):
     """Get the number of digits of n in base base."""
     if n == 0:
         return 1
@@ -71,7 +71,17 @@ def numDigits(n, base=10):
     if base == 1:
         return n
 
-    return math.floor(math.log(n) / math.log(base)) + 1
+    return math.floor(math.log(n) / math.log(base))
+
+
+def numrepr(n, base):
+
+    if base <= 10:
+        d = ''
+    else:
+        d = ':'
+    return d.join([str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)])
+
 
 def fact(n):
     p = n
@@ -80,19 +90,13 @@ def fact(n):
         p *= n
     return p
 
-def fib(n):
-    if n == 1 or n == 2:
-        return 1
-    a,b = 1,1
-    i = 2
-    while i < n:
-        a,b = b, a+b
-        i += 1
-    return b
 
 def main():
+    for n in range(2, 10):
+        for b in [2, 5, 8, 10]:
+            print(numrepr(n, b), end=' ')
+        print()
     # print(fact(10))
-    print(fib(20))
     # ns = [1, 3, 6, 10, 15, 21, 28] + list(range(1000, 2000)) + [34283340]
     # pprint.pprint([(i, len(divisors(i)), numDivisors(i), (primeFactors(i)))
     #                for i in ns])

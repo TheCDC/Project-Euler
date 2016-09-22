@@ -14,7 +14,8 @@ def test(n):
 	for a in range(int((n/2)**(1/2)),0,-1):
 		# print(n-2*i**2)
 		# print(n,n-2*a**2,a)
-		if isPrime(n-2*a**2):
+		p = n-2*a**2
+		if isPrime(p):
 			return True
 	return False
 def main():

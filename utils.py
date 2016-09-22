@@ -99,6 +99,7 @@ def fact(n):
 
 def main():
     print(isPrime(3))
+    print(primeFactors(5777))
     # for n in range(2, 10):
     #     for b in [2, 5, 8, 10]:
     #         print(numrepr(n, b), end=' ')

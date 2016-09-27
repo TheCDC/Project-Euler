@@ -27,9 +27,9 @@ ymax = len(nums)
 # print(xmax,ymax,sep='x')
 directions = [
     [(x,0) for x in range(4)],
-    [(0,y) for y in range(4)],
+    [(0,x) for x in range(4)],
     [(x,x) for x in range(4)],
-    [(x,4-x) for x in range(4)]
+    [(x,-x) for x in range(4)]
 ]
 
 ps = []

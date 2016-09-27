@@ -43,6 +43,7 @@ def primeFactors(n):
                 n = n // i
     if n != 1:
         fs.append(n)
+    fs.sort()
     return fs
 
 
@@ -77,7 +78,7 @@ def numDigits(n, base=10):
     if base == 1:
         return n
 
-    return math.ceil(math.log(n) / math.log(base))
+    return math.floor(math.log(n) / math.log(base)) + 1
 
 
 def numrepr(n, base):
@@ -99,7 +100,7 @@ def fact(n):
 
 def main():
     print(isPrime(3))
-    print(primeFactors(5777))
+    print(primeFactors(57771))
     # for n in range(2, 10):
     #     for b in [2, 5, 8, 10]:
     #         print(numrepr(n, b), end=' ')

@@ -7,14 +7,14 @@ def ds(n):
     # print(s)
     return s
 def main():
-    # find the upper bound of number of digits
+    # find an upper bound of number of digits
     nd = 1
     n = 2
     # find *a* ceiling for numbers that fit the criteria
     while n < ds(n):
 
         nd += 1
-        n = int("9"*nd)
+        n = n*10 + 9
     # lower that ceiling until the real one is found
     while n != ds(n):
         n -= 1

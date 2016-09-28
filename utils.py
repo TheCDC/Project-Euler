@@ -81,6 +81,9 @@ def numDigits(n, base=10):
     return math.floor(math.log(n) / math.log(base)) + 1
 
 
+def digits(n,b):
+    return [nthDigit(n,i,b) for i in range(numDigits(n,b))]
+
 def numrepr(n, base):
 
     if base <= 10:

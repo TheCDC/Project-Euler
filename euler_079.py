@@ -1,7 +1,6 @@
-from beeprint import pp as pprint
-
 
 class Breadcrumb():
+
     """Used as a marker to de-recurse the list from backtracking."""
 
     def __init__(self, depth):
@@ -24,14 +23,17 @@ def test(lst, rules):
     return True
 
 
-def backtrack(guess, choice_pool, rules, depth=0, greedy=True):
+def backtrack(guess, choice_pool, rules, depth=0, greedy=False):
     tails = []
     for i, c in enumerate(choice_pool):
         head = guess + [c]
         if test(head, rules):
-            tail = backtrack(head, choice_pool[:i] +
-                             choice_pool[i + 1:], rules, depth=depth + 1)
+            tail = backtrack(head,
+                             choice_pool[:i] + choice_pool[i + 1:],
+                             rules, depth=depth + 1, greedy=greedy)
             tails.extend([Breadcrumb(depth)] + head + tail)
+            if greedy:
+                break
     return tails
 
 

@@ -24,6 +24,7 @@ def test(lst, rules) -> bool:
 
 
 def backtrack(guess, choice_pool, rules, depth=0) -> list:
+    # print(locals())
     tails = []
     for i, c in enumerate(choice_pool):
         head = guess + [c]

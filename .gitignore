@@ -1,1 +1,5 @@
 euler_*.build/*
+*.pyc
+bin/*/*.build
+bin/*/*.exe
+bin/*/*.txt

@@ -2,15 +2,16 @@
 import functools
 
 
-def collatz(n):
+@functools.lru_cache()
+def collatz(n) -> int:
     if n % 2 == 0:
-        return n / 2
+        return n // 2
     else:
         return 3 * n + 1
 
 
 @functools.lru_cache()
-def seqlen(n):
+def seqlen(n) -> int:
     l = 0
     while n != 1:
         n = collatz(n)
@@ -26,9 +27,14 @@ def main():
 
     longest = 0
     N = 0
-    results = [(i,seqlen(i) for i in range(2, 1000000)]:
-    with open("014.txt",'w') as f:
-        f.write('\n'.join(results))
+    for i in range(2,1000000):
+        n = seqlen(i)
+        if n > longest:
+            longest = n
+            N = i
+    # results = [(i,seqlen(i)) for i in range(2, 1000000)]
+    # with open("014.txt",'w') as f:
+    #     f.write('\n'.join(results))
     print(N)
 
 if __name__ == "__main__":

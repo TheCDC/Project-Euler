@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 class Breadcrumb():
 
-    """Used as a marker to de-recurse the list from backtracking."""
+    """Used as a marker to de-recurse the list result from backtracking."""
 
     def __init__(self, depth):
         self.depth = depth
@@ -13,7 +13,7 @@ class Breadcrumb():
         return repr(self)
 
 
-def test(lst, rules):
+def test(lst, rules) -> bool:
     for rule in rules:
         try:
             if lst.index(rule[1]) < lst.index(rule[0]):
@@ -23,21 +23,19 @@ def test(lst, rules):
     return True
 
 
-def backtrack(guess, choice_pool, rules, depth=0, greedy=False):
+def backtrack(guess, choice_pool, rules, depth=0) -> list:
     tails = []
     for i, c in enumerate(choice_pool):
         head = guess + [c]
         if test(head, rules):
             tail = backtrack(head,
                              choice_pool[:i] + choice_pool[i + 1:],
-                             rules, depth=depth + 1, greedy=greedy)
+                             rules, depth=depth + 1)
             tails.extend([Breadcrumb(depth)] + head + tail)
-            if greedy:
-                break
     return tails
 
 
-def interpret(l):
+def interpret(l) -> list:
     """Return a list of lists from a list  delineated by Breadcrumb()'s"""
     r = []
     for i in l:
@@ -48,7 +46,7 @@ def interpret(l):
     return r
 
 
-def discard(lst, minset):
+def discard(lst, minset) -> list:
     """Return lst without items that aren't supersets of minset."""
     r = []
     for l in lst:
@@ -57,25 +55,25 @@ def discard(lst, minset):
     return r
 
 
-def main():
+def get_rules(l) -> list:
+    """Return a list of item ordering rules from an iterable."""
+    rs = []
+    for index, item in enumerate(l):
+        for i in range(index):
+            rs.append((l[i], item))
+    return rs
+
+
+def main() -> None:
     with open("p079_keylog.txt") as f:
         contents = f.read().strip()
         samples = [tuple(i.strip()) for i in contents.split('\n')]
     all_digits = set(''.join(contents.split('\n')))
     choice_pool = tuple(all_digits)
     orders = []
-    guess = []
     for i in samples:
-        orders.append(tuple(i[:2]))
-        orders.append(tuple(i[1:]))
-        orders.append((i[0], i[-1]))
-    sods = set(orders)
-    # print(sods)
-    # print(test(["1", "2", "3"], (("1", "2"),)))
-    # results = backtrack([], ["1", "2", "3"], (("1", "2"), ("2", "3")))
-    # pprint(interpret(results))
-    # print(backtrack([], ["1"], (("1", "2"),)))
-    # print(choice_pool, orders)
+        orders.extend(get_rules(i))
+
     results = interpret(backtrack([], choice_pool, orders))
     for i in [int(''.join(i)) for i in discard(results, all_digits)]:
         print(i, end=" ")

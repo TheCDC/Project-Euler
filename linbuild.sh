@@ -1,0 +1,1 @@
+nuitka $1 --recurse-directory . --output-dir=bin/lin

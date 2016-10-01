@@ -21,11 +21,11 @@ nstr = """73167176531330624919225119674426574742355349194934
 71636269561882670428252483600823257530420752963450"""
 
 nstr = ''.join(nstr.split('\n'))
-print(nstr)
+# print(nstr)
 
 n = 13
 subs = [nstr[i:i+n] for i in range(0,len(nstr))]
 # print(subs)
 
 from utils import numprod
-print(sorted([(i,numprod([int(j) for j in i])) for i in subs], key=lambda x: x[1]))
+print(sorted([(i,numprod([int(j) for j in i])) for i in subs], key=lambda x: x[1])[-1][1])

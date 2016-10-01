@@ -23,21 +23,37 @@ def test(lst, rules) -> bool:
     return True
 
 
-def backtrack(guess, choice_pool, rules, depth=0) -> list:
+def backtrack_old(guess, choice_pool, rules, depth=0) -> list:
     # print(locals())
-    tails = []
-    for i, c in enumerate(choice_pool):
-        head = guess + [c]
-        if test(head, rules):
-            tail = backtrack(head,
-                             choice_pool[:i] + choice_pool[i + 1:],
-                             rules, depth=depth + 1)
-            tails.extend([Breadcrumb(depth)] + head + tail)
-    return tails
+    def bt(guess, choice_pool, rules, depth):
+        tails = []
+        for i, c in enumerate(choice_pool):
+            head = guess + [c]
+            if test(head, rules):
+                tail = bt(head,
+                          choice_pool[:i] + choice_pool[i + 1:],
+                          rules, depth=depth + 1)
+                tails.extend([Breadcrumb(depth)] + head + tail)
+        return tails
+    return interpret(bt(guess, choice_pool, rules, depth))
+
+
+def backtrack(guess, next_choice_func, test_func, depth=0) -> list:
+    # print(locals())
+    def bt(guess, next_choice_func, test_func, depth):
+        tails = []
+        for i, c in enumerate(next_choice_func(guess)):
+            head = guess + [c]
+            if test_func(head):
+                tail = bt(head, next_choice_func, test_func, depth=depth + 1)
+                tails.extend([Breadcrumb(depth)] + head + tail)
+        return tails
+    return interpret(bt(guess, next_choice_func, test_func, depth))
 
 
 def interpret(l) -> list:
-    """Return a list of lists from a list  delineated by Breadcrumb()'s"""
+    """Return a list of lists from a list  delineated by Breadcrumb()'s.
+    Used to structure the output from backtrack."""
     r = []
     for i in l:
         if isinstance(i, Breadcrumb):
@@ -75,7 +91,16 @@ def main() -> None:
     for i in samples:
         orders.extend(get_rules(i))
 
-    results = interpret(backtrack([], choice_pool, orders))
+    def my_next_choice(guess):
+        """Problem-specific function that return all possible next choices
+        from a guess."""
+        return tuple(all_digits - set(guess))
+
+    def my_test_func(guess):
+        """Problem-specific function that checks if a geuss is possible."""
+        return test(guess, orders)
+
+    results = backtrack([], my_next_choice, my_test_func)
     for i in [int(''.join(i)) for i in discard(results, all_digits)]:
         print(i, end=" ")
     print()

@@ -97,7 +97,7 @@ def main() -> None:
         return tuple(all_digits - set(guess))
 
     def my_test_func(guess):
-        """Problem-specific function that checks if a geuss is possible."""
+        """Problem-specific function that checks if a guess is possible."""
         return test(guess, orders)
 
     results = backtrack([], my_next_choice, my_test_func)

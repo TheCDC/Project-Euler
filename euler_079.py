@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import pydot
+
 class Breadcrumb():
 
     """Used as a marker to de-recurse the list result from backtracking."""
@@ -42,8 +44,9 @@ def backtrack(guess, next_choice_func, test_func, depth=0) -> list:
     # print(locals())
     def bt(guess, next_choice_func, test_func, depth):
         tails = []
-        for i, c in enumerate(next_choice_func(guess)):
+        for _, c in enumerate(next_choice_func(guess)):
             head = guess + [c]
+
             if test_func(head):
                 tail = bt(head, next_choice_func, test_func, depth=depth + 1)
                 tails.extend([Breadcrumb(depth)] + head + tail)
@@ -90,7 +93,13 @@ def main() -> None:
     orders = []
     for i in samples:
         orders.extend(get_rules(i))
-
+        
+    # create and plot the graph of rules
+    g = pydot.Dot()
+    for o in set(orders):
+        e = pydot.Edge(*o)
+        g.add_edge(e)
+    g.write_png("079_graph.png")
     def my_next_choice(guess):
         """Problem-specific function that return all possible next choices
         from a guess."""
@@ -104,6 +113,6 @@ def main() -> None:
     for i in [int(''.join(i)) for i in discard(results, all_digits)]:
         print(i, end=" ")
     print()
-
 if __name__ == '__main__':
     main()
+

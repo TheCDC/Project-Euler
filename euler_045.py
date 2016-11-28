@@ -1,37 +1,46 @@
+#!/usr/bin/env python3
+"""Strategy
+We are looking for numbers in the intersection of T, P, and H space.
+We a way of testing if a given n is n those spaces.
+We do that by inverting the T, P, and H functions
+"""
 def tn(n):
     """nth triangle number"""
-    return n*(n+1)/2
+    return n * (n + 1) / 2
 
 
 def nt(t):
     """n, given a triangle number"""
-    sq = (1 - 4*(-2*t))**(1/2)
-    return max((-1/2 + sq/2, -1/2 - sq/2))
+    sq = (1 - 4 * (-2 * t))**(1 / 2)
+    return max((-1 / 2 + sq / 2, -1 / 2 - sq / 2))
 
 
 def pn(n):
     """nth pentagonal number"""
-    return n*(3*n-1)/2
+    return n * (3 * n - 1) / 2
 
 
-def np(p):
-    """n, given pantegonal number"""
-    sq = (1 - 4*(3*(-2*p)))**(1/2)
-    return max((1/6 + sq/6, 1/6 - sq/6))
+def np(p) -> float:
+    """n, given pentagonal number.
+        If p is not a true pentagonal number
+    then output will be a fraction."""
+    sq = (1 - 4 * (3 * (-2 * p)))**(1 / 2)
+    return max((1 / 6 + sq / 6, 1 / 6 - sq / 6))
 
 
 def hn(n):
     """nth hexagonal number"""
-    return n*(2*n-1)
+    return n * (2 * n - 1)
 
 
 def nh(h):
     """n, given hexagonal number"""
-    sq = (1-4*2*(-h))**(1/2)
-    return max((1/4 + sq/4, 1/4 - sq/4))
+    sq = (1 - 4 * 2 * (-h))**(1 / 2)
+    return max((1 / 4 + sq / 4, 1 / 4 - sq / 4))
 
 
 def test(n):
+    """Map n to triangle space and check if that number is also in pentagon, hexagon space."""
     a = tn(n)
     return np(a) % 1 == 0 and nh(a) % 1 == 0
 

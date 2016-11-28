@@ -17,7 +17,10 @@ def numprod(l, default=1):
 
 def isPrime(n):
     """Return whether a number is prime."""
-    if n == 2:
+    # handle base cases
+    if n <= 0:
+        return False
+    elif n == 2:
         return True
     elif n == 1:
         return False
@@ -26,29 +29,38 @@ def isPrime(n):
             if n % i == 0:
                 return False
     except Exception as e:
-        print(e,n)
+        print(e, n)
         raise e
     return True
 
 
 def primeFactors(n):
-    """Get all prime factors of a number."""
+    """Return all prime factors of a number.
+    Strategy: loop up to sqrt(n), divide n by any prime factors
+    found along the way until n is prime."""
+
+    # a base case
     if n == 1:
         return []
-    fs = []
+    found_factors = []
+    # check if reduction is complete
     while not isPrime(n) and n > 1:
+        # locate factors below sqrt(n)
         for i in range(2, int(n**(1 / 2)) + 1):
             if n % i == 0 and isPrime(i):
-                fs.append(i)
+                found_factors.append(i)
                 n = n // i
+    # 1 will always divide and isn't prime, discard it.
     if n != 1:
-        fs.append(n)
-    fs.sort()
-    return fs
+        found_factors.append(n)
+    found_factors.sort()
+    return found_factors
 
 
 def numDivisors(n):
-    """Get the number of divisors of a number."""
+    """Get the number of divisors of a number.
+    Math: Return the product of the sum the powers of the unique prime factors
+    incremented by one."""
     if isPrime(n):
         return 2
     c = collections.Counter(primeFactors(n))
@@ -58,9 +70,10 @@ def numDivisors(n):
 def divisors(n):
     """Get all divisors of a number."""
     l = []
+    # only needs to loop to n/2 
     for i in range(1, int(n // 2)):
         if n % i == 0:
-            l.extend([n, i / n])
+            l.extend([n, n // i])
     return l
 
 
@@ -81,8 +94,9 @@ def numDigits(n, base=10):
     return math.floor(math.log(n) / math.log(base)) + 1
 
 
-def digits(n,b):
-    return [nthDigit(n,i,b) for i in range(numDigits(n,b))]
+def digits(n, b):
+    return [nthDigit(n, i, b) for i in range(numDigits(n, b))]
+
 
 def numrepr(n, base):
 
@@ -90,7 +104,7 @@ def numrepr(n, base):
         d = ''
     else:
         d = ':'
-    return d.join([str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)])
+    return d.join([str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)])+"_{}".format(base)
 
 
 def fact(n):
@@ -102,8 +116,8 @@ def fact(n):
 
 
 def main():
-    print(isPrime(3))
-    print(primeFactors(57771))
+    # print(isPrime(3))
+    # print(primeFactors(57771))
     # for n in range(2, 10):
     #     for b in [2, 5, 8, 10]:
     #         print(numrepr(n, b), end=' ')
@@ -114,6 +128,7 @@ def main():
     #                for i in ns])
     # pprint.pprint([ for i in ns])
     # pprint.pprint([ for i in ns])
+    print(numrepr(13456783,2))
 
 
 if __name__ == '__main__':

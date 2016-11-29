@@ -15,8 +15,8 @@ def main():
           for index, item in enumerate(lines)]
     # print(cs)
     print(max(cs, key=lambda x: x[1])[0])
-    print(val(2, 3), 2**3)
-    print(val(2, 4), 2**4)
+    # print(val(2, 3), 2**3)
+    # print(val(2, 4), 2**4)
 
 if __name__ == '__main__':
     main()

@@ -24,7 +24,7 @@ NOTE: Once the chain starts the terms are allowed to go above one million.
 import functools
 
 
-@functools.lru_cache(maxsize=4096)
+@functools.lru_cache(maxsize=4096*2)
 def collatz(n) -> int:
     return (n // 2)*((n+1)%2) + (3 * n + 1)*(n%2)
 
@@ -43,7 +43,7 @@ def seqlen(n) -> int:
         l += 1
     l += 1
     seq_dict.update({n:l})
-    print(nn,l)
+    # print(nn,l)
     return l
 
 

@@ -44,7 +44,8 @@ def main():
     except KeyboardInterrupt:
         print("Stopped at:", n, numdivs)
     # print(n,tri, numDivisors(tri),len(nd))
-    print(tri)
+    # print(tri)
+    print(sum(range(500)))
     # print(n)
     # pprint([(i,numDivisors(i)) for i in tris[-10:]])
 if __name__ == '__main__':

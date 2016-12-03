@@ -122,28 +122,22 @@ def sumBelow(tri, l, r, hist=None):
     return s
 
 
-def main():
-    # print(getpos(triangle, 0, 0))
-    # print(getpos(triangle, 0, 14))
-    # print(sumBelow(triangle, 0, 0))
-    for i in range(8):
-        print(getpos(triangle, i, i))
-        # print(getpos(triangle, i, 0), getpos(triangle, 0, i))
-    print(getpos(triangle, 7, 7))
-    # print(getpos(triangle, i, 0))
-    # print()
-    decisionTree = triangle[:]
-    for l in range(len(triangle)):
-        for r in range( len(triangle) - l ):
-            # print(l+r)
-            # print(l, r, l+r)
-            setpos(decisionTree, l, r, sumBelow(triangle, l, r))
-    print("DTree:", decisionTree)
-    # print(goLeft(triangle, 0, 0))
-    # print(goRight(triangle, 0, 0))
-    # now make each position in the decisiontree
-    # equal to the sum of the triangle of which it
-    # is the apex
+def pairwise(f, it):
+    out = []
+    for i in range(len(it) - 1):
+        r = f(it[i], it[i + 1])
+        out.append(r)
+        print(it[i], it[i + 1])
+    # return [f(it[i], it[i + 1]) for i in range(len(it) - 1)]
+    return out
 
+
+def main():
+    print(pairwise(max, [8, 5, 3, 9]))
+    cur = triangle.pop()
+    while len(triangle) > 0:
+        cur = pairwise(max, cur)
+        cur = list(map(sum, zip(cur, triangle.pop())))
+    print(cur)
 if __name__ == '__main__':
     main()

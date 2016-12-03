@@ -64,80 +64,22 @@ triangle = """                      75
                04 62 98 27 23 09 70 98 73 93 38 53 60 04 23"""
 triangle = [[int(j) for j in i.strip().split()] for i in triangle.split('\n')]
 st = sum([sum(i) for i in triangle])
-print("SUMS:", st, st - sum(triangle[-1]))
-# print(triangle)
 
 
-def getpos(tri, l, r):
-    # print('l', l, 'r', r)
-    try:
-        # print(ceil(len(tri[l + r]) / 2) + r - l)
-        x = l + r
-        y = r
-        # print(x, y)
-        return tri[x][y]
-    except IndexError:
-        raise ValueError
-
-
-def setpos(tri, l, r, val):
-    try:
-        tri[l + r][r - l] = val
-    except IndexError:
-        raise ValueError
-
-
-def goRight(tri, l, r):
-    s = 0
-    try:
-        s += getpos(tri, l, r)
-        s += goRight(tri, l, r + 1)
-    except ValueError:
-        pass
-    return s
-
-
-def goLeft(tri, l, r):
-    s = 0
-    try:
-        s += getpos(tri, l + 1, r)
-        s += goLeft(tri, l + 1, r)
-    except ValueError:
-        pass
-    return s
-# @functools.lru_cache(maxsize=128)
-
-
-def sumBelow(tri, l, r, hist=None):
-    s = 0
-    s += getpos(tri, l, r)
-    try:
-        s += sumBelow(tri, l + 1, r)
-    except:
-        pass
-    try:
-        s += goRight(tri, l, r + 1)
-    except:
-        pass
-    return s
-
-
-def pairwise(f, it):
+def pairwise(f, it, initializer=None):
     out = []
     for i in range(len(it) - 1):
         r = f(it[i], it[i + 1])
         out.append(r)
-        print(it[i], it[i + 1])
-    # return [f(it[i], it[i + 1]) for i in range(len(it) - 1)]
     return out
 
 
 def main():
-    print(pairwise(max, [8, 5, 3, 9]))
+    # print(pairwise(max, [8, 5, 3, 9]))
     cur = triangle.pop()
     while len(triangle) > 0:
         cur = pairwise(max, cur)
         cur = list(map(sum, zip(cur, triangle.pop())))
-    print(cur)
+    print(cur[0])
 if __name__ == '__main__':
     main()

@@ -44,9 +44,6 @@ Repeat by collapsing all remaining options into the next row and so on.
 """
 
 
-import functools
-from math import ceil
-from pprint import pprint
 triangle = """                      75
                                   95 64
                                  17 47 82

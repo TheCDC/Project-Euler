@@ -63,7 +63,7 @@ triangle = [[int(j) for j in i.strip().split()] for i in triangle.split('\n')]
 st = sum([sum(i) for i in triangle])
 
 
-def pairwise(f, it, initializer=None):
+def pairwise(f, it):
     out = []
     for i in range(len(it) - 1):
         r = f(it[i], it[i + 1])
@@ -71,12 +71,19 @@ def pairwise(f, it, initializer=None):
     return out
 
 
+def max_path(tri):
+    t = tri[:]
+    cur = t.pop()
+    while len(t) > 0:
+        cur = pairwise(max, cur)
+        cur = list(map(sum, zip(cur, t.pop())))
+    return cur
+    # print(cur[0])
+
+
 def main():
     # print(pairwise(max, [8, 5, 3, 9]))
-    cur = triangle.pop()
-    while len(triangle) > 0:
-        cur = pairwise(max, cur)
-        cur = list(map(sum, zip(cur, triangle.pop())))
-    print(cur[0])
+    print(max_path(triangle)[0])
+
 if __name__ == '__main__':
     main()

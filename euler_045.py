@@ -55,6 +55,11 @@ def test(n) -> bool:
 
 
 def main():
+    # sanity and correctness check
+    for i in range(1,1000):
+        assert (nt(tn(i))) == i
+        assert (np(pn(i))) == i
+        assert (nh(hn(i))) == i
     start = 40755
     i = start + 1
     while not test(i):

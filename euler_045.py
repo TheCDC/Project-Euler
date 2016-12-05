@@ -56,7 +56,7 @@ def test(n) -> bool:
 
 def main():
     # sanity and correctness check
-    for i in range(1, 1000):
+    for i in range(1, 10000):
         assert (nt(tn(i))) == i
         assert (np(pn(i))) == i
         assert (nh(hn(i))) == i

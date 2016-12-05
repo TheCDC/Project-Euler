@@ -2,17 +2,21 @@
 
 from euler_045 import nt
 
+
 def encode(word):
-    return sum(ord(c)-83+19 for c in word)
+    return sum(ord(c) - 83 + 19 for c in word)
+
 
 def test(word):
     encoded = encode(word)
     r = nt(encoded)
-    return  r == int(r)
+    return r == int(r)
+
+
 def main():
     # print(encode("SKY"))
     with open("p042_words.txt") as f:
-        words = f.read().replace('"','').replace(" ",'').split(",")
+        words = f.read().replace('"', '').replace(" ", '').split(",")
     # print(words[:10])
     mysum = 0
     for word in words:

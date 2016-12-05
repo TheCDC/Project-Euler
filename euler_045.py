@@ -6,18 +6,23 @@ We do that by inverting the T, P, and H functions
 """
 
 
-def tn(n):
+def quadratic(a, b, c) -> float:
+    sq = (b**2 - 4 * a * c)**(1 / 2)
+    denom = 2 * a
+    return max(((-b + sq) / denom, (-b - sq) / denom))
+
+
+def tn(n) -> float:
     """nth triangle number"""
     return n * (n + 1) / 2
 
 
-def nt(t):
+def nt(t) -> float:
     """n, given a triangle number"""
-    sq = (1 - 4 * (-2 * t))**(1 / 2)
-    return max((-1 / 2 + sq / 2, -1 / 2 - sq / 2))
+    return quadratic(1 / 2, 1 / 2, - t)
 
 
-def pn(n):
+def pn(n) -> float:
     """nth pentagonal number"""
     return n * (3 * n - 1) / 2
 
@@ -26,22 +31,20 @@ def np(p) -> float:
     """n, given pentagonal number.
         If p is not a true pentagonal number
     then output will be a fraction."""
-    sq = (1 - 4 * (3 * (-2 * p)))**(1 / 2)
-    return max((1 / 6 + sq / 6, 1 / 6 - sq / 6))
+    return quadratic(3 / 2, -1 / 2, -p)
 
 
-def hn(n):
+def hn(n) -> float:
     """nth hexagonal number"""
     return n * (2 * n - 1)
 
 
-def nh(h):
+def nh(h) -> float:
     """n, given hexagonal number"""
-    sq = (1 - 4 * 2 * (-h))**(1 / 2)
-    return max((1 / 4 + sq / 4, 1 / 4 - sq / 4))
+    return quadratic(2, -1, -h)
 
 
-def test(n):
+def test(n) -> bool:
     """Map n to triangle space and check if that number is also found in pentagon, hexagon space."""
     a = tn(n)
     return np(a) % 1 == 0 and nh(a) % 1 == 0

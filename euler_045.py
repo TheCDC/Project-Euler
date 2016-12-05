@@ -9,43 +9,42 @@ We do that by inverting the T, P, and H functions
 def quadratic(a, b, c) -> float:
     sq = (b**2 - 4 * a * c)**(1 / 2)
     denom = 2 * a
-    return max(((-b + sq) / denom, (-b - sq) / denom))
+    return max((-b + sq) / denom, (-b - sq) / denom)
 
 
-def tn(n) -> float:
+def tn(n: float) -> float:
     """nth triangle number"""
     return n * (n + 1) / 2
 
 
-def nt(t) -> float:
-    """n, given a triangle number"""
-    return quadratic(1 / 2, 1 / 2, - t)
-
-
-def pn(n) -> float:
+def pn(n: float) -> float:
     """nth pentagonal number"""
     return n * (3 * n - 1) / 2
 
 
-def np(p) -> float:
-    """n, given pentagonal number.
-        If p is not a true pentagonal number
-    then output will be a fraction."""
-    return quadratic(3 / 2, -1 / 2, -p)
-
-
-def hn(n) -> float:
+def hn(n: float) -> float:
     """nth hexagonal number"""
     return n * (2 * n - 1)
 
 
-def nh(h) -> float:
+def nt(t: float) -> float:
+    """n, given a triangle number"""
+    return quadratic(1 / 2, 1 / 2, - t)
+
+
+def np(p: float) -> float:
+    """n, given pentagonal number."""
+    return quadratic(3 / 2, -1 / 2, -p)
+
+
+def nh(h: float) -> float:
     """n, given hexagonal number"""
     return quadratic(2, -1, -h)
 
 
-def test(n) -> bool:
-    """Map n to triangle space and check if that number is also found in pentagon, hexagon space."""
+def test(n: float) -> bool:
+    """Map n to triangle space.
+    Check if that number is also found in pentagon, hexagon space."""
     a = tn(n)
     return np(a) % 1 == 0 and nh(a) % 1 == 0
 
@@ -54,19 +53,21 @@ def test(n) -> bool:
 # print([nh(i) for i in [1, 6, 15, 28]])
 
 
-def main():
+def sanity():
     # sanity and correctness check
     for i in range(1, 10000):
         assert (nt(tn(i))) == i
         assert (np(pn(i))) == i
         assert (nh(hn(i))) == i
+sanity()
+
+
+def main():
     start = 40755
     i = start + 1
     while not test(i):
         i += 1
-        # if i % 1000000 == 0:
-        #     print("At:", i, tn(i))
-    # print(i, tn(i))
-    print(int(tn(i)) if tn(i) % 1 == 0 else tn(i))
+    print(tn(i))
+
 if __name__ == '__main__':
     main()

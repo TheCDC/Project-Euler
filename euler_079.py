@@ -99,7 +99,7 @@ def main() -> None:
     for o in set(orders):
         e = pydot.Edge(*o)
         g.add_edge(e)
-    g.write_png("079_graph.png")
+    g.write_png("outputs/079_graph.png")
     def my_next_choice(guess):
         """Problem-specific function that return all possible next choices
         from a guess."""
@@ -111,8 +111,7 @@ def main() -> None:
 
     results = backtrack([], my_next_choice, my_test_func)
     for i in [int(''.join(i)) for i in discard(results, all_digits)]:
-        print(i, end=" ")
-    print()
+        print(i)
 if __name__ == '__main__':
     main()
 

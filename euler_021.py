@@ -6,8 +6,9 @@ from functools import lru_cache
 def d(n):
     return sum(divisors(n))
 
+
 known = set()
-for a in range(10000):
+for a in range(1, 10000):
     b = d(a)
     db = d(b)
     if db == a and b != a and not set((a, b)) & known:

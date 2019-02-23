@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from utils import numprod
+
+
 def num_rect_positions(w, h, bw, bh):
     return (bw - w + 1) * (bh - h + 1)
 
@@ -12,18 +15,21 @@ def main():
     i = 1
     while rect_sum(1, i) < 2000000:
         i += 1
-    tests = sorted([(j, rect_sum(1, j)) for j in range(i - 100, i + 100)],
-                   key=lambda x: 1 / abs(N - x[-1]))
+    tests = sorted(
+        [(j, rect_sum(1, j)) for j in range(i - 100, i + 100)],
+        key=lambda x: 1 / abs(N - x[-1]))
     boundary = tests[-1][0]
     # print(boundary)
 
-    closest = ((0,0), 0)
+    closest = ((0, 0), 0)
 
-    for x in range(1, int(boundary**(1/2)) + 1):
-        for y in range(1, boundary  + 1):
+    for x in range(1, int(boundary**(1 / 2)) + 1):
+        for y in range(1, boundary + 1):
             if abs(rect_sum(x, y) - N) < abs(closest[1] - N):
                 closest = ((x, y), rect_sum(x, y))
-                
-    print(closest[-1])
+
+    print(numprod(closest[0]))
+
+
 if __name__ == '__main__':
     main()

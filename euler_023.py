@@ -53,7 +53,7 @@ def problem():
             except KeyError:
                 pass
     # print('\n'.join(map(str, list(all_candidates))))
-    print(len(all_candidates))
+    # print(len(all_candidates))
     return sum(all_candidates)
 
 

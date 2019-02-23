@@ -110,9 +110,9 @@ def numrepr(n, base):
         d = ''
     else:
         d = ':'
-    return d.join(
-        [str(nthDigit(n, i, base))
-         for i in range(numDigits(n, base), -1, -1)]) + "_{}".format(base)
+    return d.join([
+        str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)
+    ])  # + "_{}".format(base)
 
 
 def fact(n):

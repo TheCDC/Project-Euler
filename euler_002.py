@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 fibs = [0,1]
 while fibs[-1] < 4000000:
 	fibs.append(fibs[-1] + fibs[-2])

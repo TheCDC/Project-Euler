@@ -69,12 +69,18 @@ def numDivisors(n):
 
 def divisors(n):
     """Get all divisors of a number."""
-    l = []
-    # only needs to loop to n/2 
-    for i in range(1, int(n // 2)):
+    if n == 0:
+        raise ValueError('0 is invalid!')
+    if isPrime(n):
+        return [1, n]
+    if n == 1:
+        return [1]
+    l = set()
+    # only needs to loop to n^(1/2)
+    for i in range(1, math.ceil(n**(1 / 2)) + 1):
         if n % i == 0:
-            l.extend([n, n // i])
-    return l
+            l.update([i, n // i])
+    return sorted(l)
 
 
 def nthDigit(n, d, base=10):
@@ -104,7 +110,9 @@ def numrepr(n, base):
         d = ''
     else:
         d = ':'
-    return d.join([str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)])+"_{}".format(base)
+    return d.join(
+        [str(nthDigit(n, i, base))
+         for i in range(numDigits(n, base), -1, -1)]) + "_{}".format(base)
 
 
 def fact(n):
@@ -116,19 +124,7 @@ def fact(n):
 
 
 def main():
-    # print(isPrime(3))
-    # print(primeFactors(57771))
-    # for n in range(2, 10):
-    #     for b in [2, 5, 8, 10]:
-    #         print(numrepr(n, b), end=' ')
-    #     print()
-    # print(fact(10))
-    # ns = [1, 3, 6, 10, 15, 21, 28] + list(range(1000, 2000)) + [34283340]
-    # pprint.pprint([(i, len(divisors(i)), numDivisors(i), (primeFactors(i)))
-    #                for i in ns])
-    # pprint.pprint([ for i in ns])
-    # pprint.pprint([ for i in ns])
-    print(numrepr(13456783,2))
+    print(numrepr(13456783, 2))
 
 
 if __name__ == '__main__':

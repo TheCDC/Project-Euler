@@ -43,7 +43,7 @@ def generate_by_sieve(n):
 
 
 def main():
-    debug = True
+    debug = False
     N = 1000000
     if debug:
         print('Generating primes')

@@ -55,8 +55,8 @@ def chain(n):
 chains = list()
 longest = list()
 for i in range(1, 1000000):
-    if i % 100000 == 0:
-        print(i)
+    # if i % 100000 == 0:
+    #     print(i)
     try:
         mychain = list(chain(i))
         chains.append(mychain)

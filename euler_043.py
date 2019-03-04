@@ -19,7 +19,7 @@ DIVISORS = [1, 2, 3, 5, 7, 11, 13, 17]
 
 
 def check_substr_divibility(l):
-    for idx, p in list(enumerate(DIVISORS)):
+    for idx, p in reversed(list(enumerate(DIVISORS))):
         n = list_to_num(l[idx:idx + 3], 10)
         if n % p != 0:
             return False

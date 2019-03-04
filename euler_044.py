@@ -31,13 +31,14 @@ def np(p) -> float:
     return quadratic(3 / 2, -1 / 2, -p)
 
 
-def test(a, b) -> bool:
-    return np(a + b) % 1 == 0 and np(abs(a-b)) % 1 == 0
+def test(pa, pb) -> bool:
+    """Sum and difference of a and b are both pentagonal?"""
+    return np(pa + pb) % 1 == 0 and np(abs(pa-pb)) % 1 == 0
 
 
 def main():
     # check all combinations of integers A and B with an increasing upper bound
-    # until A and B are pentagonal
+    # until the sum and difference of A and B are pentagonal
     a = 0
     while True:
         a += 1

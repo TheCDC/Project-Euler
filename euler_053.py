@@ -30,10 +30,21 @@ def factorial(n):
 def ncr(n, r):
     return factorial(n)/(factorial(r)*factorial(n-r))
 
-c = 0
-for n in range(1,100+1):
-    for r in range(1,n+1):
-        res = ncr(n,r)
-        if res> 1000000:
-            c += 1
-print(c)
+
+def main():
+
+    c = 0
+    for n in range(1, 100+1):
+        flag = False
+        for r in range(n, 0, -1):
+            res = ncr(n, r)
+            if res > 1000000:
+                c += 1
+                flag = True
+            if res < 1000000 and flag:
+                break
+    print(c)
+
+
+if __name__ == '__main__':
+    main()

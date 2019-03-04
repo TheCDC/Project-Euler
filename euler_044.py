@@ -48,7 +48,7 @@ def main():
             if test(pa, pb):
                 # print(a,b,abs(a-b))
                 print(abs(int(pa - pb)))
-                print(a, b, np(a), np(b))
+                # print(a, b, np(a), np(b))
                 quit()
 
 

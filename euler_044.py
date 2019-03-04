@@ -33,20 +33,23 @@ def np(p) -> float:
 
 def test(a, b) -> bool:
     return np(a + b) % 1 == 0 and np(abs(a-b)) % 1 == 0
-# print([nt(i) for i in [1, 3, 6, 10]])
-# print([np(i) for i in [1, 5, 12, 22]])
-# print([nh(i) for i in [1, 6, 15, 28]])
 
 
 def main():
-    a = 1
+    # check all combinations of integers A and B with an increasing upper bound
+    # until A and B are pentagonal
+    a = 0
     while True:
+        a += 1
+
         for b in range(a, 0, -1):
             pa, pb = pn(a), pn(b)
             if test(pa, pb):
                 # print(a,b,abs(a-b))
                 print(abs(int(pa - pb)))
+                print(a, b, np(a), np(b))
                 quit()
-        a += 1
+
+
 if __name__ == '__main__':
     main()

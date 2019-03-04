@@ -1,6 +1,4 @@
 from utils import isPrime
-def iscomposite(n):
-    return not isPrime(n)
 
 def test(n):
     """return true if number fits the conjecture"""
@@ -20,14 +18,10 @@ def test(n):
 def main():
     tests = [9,15,21,25,27,33]
     assert all([test(i) for i in tests])
-    # for i in [9,15,21,25,27,33]:
-    #   print(i,test(i))
     n = 3
     # skip over primes
     while test(n) or isPrime(n):
         n+= 2
-        if n%1000000 == 0:
-            print("at",n)
     print(n)
 
 if __name__ == '__main__':

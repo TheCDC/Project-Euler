@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Strategy
 We are looking for numbers in the intersection of T, P, and H space.
-We a way of testing if a given n is n those spaces.
+We need a way of testing if a given n is n those spaces.
 We do that by inverting the T, P, and H functions
 """
 
@@ -47,10 +47,6 @@ def test(n: float) -> bool:
     Check if that number is also found in pentagon, hexagon space."""
     a = tn(n)
     return np(a) % 1 == 0 and nh(a) % 1 == 0
-
-# print([nt(i) for i in [1, 3, 6, 10]])
-# print([np(i) for i in [1, 5, 12, 22]])
-# print([nh(i) for i in [1, 6, 15, 28]])
 
 
 def sanity():

@@ -38,7 +38,7 @@ def test(pa, pb) -> bool:
 
 def main():
     # check all combinations of integers A and B with an increasing upper bound
-    # until the sum and difference of A and B are pentagonal
+    # until the sum and difference of P(A) and P(B) are pentagonal
     a = 0
     while True:
         a += 1

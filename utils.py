@@ -70,7 +70,7 @@ def numDivisors(n):
 def divisors(n):
     """Get all divisors of a number."""
     if n == 0:
-        raise ValueError('0 is invalid!')
+        return [0]
     if isPrime(n):
         return [1, n]
     if n == 1:

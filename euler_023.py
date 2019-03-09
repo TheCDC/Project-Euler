@@ -41,7 +41,7 @@ def problem():
     upper_bound = 28123
     abundants = [i for i in range(1, upper_bound + 1) if is_abundant(i)]
 
-    print(f'Found {len(abundants)} abundant numbers less than {upper_bound}')
+    # print(f'Found {len(abundants)} abundant numbers less than {upper_bound}')
 
     all_candidates = set(range(upper_bound + 1))
     for idxa, a in enumerate(abundants):

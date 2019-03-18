@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-from utils import isPrime
-primes = [2,3]
-i = primes[-1]
-while primes[-1] < 2000000:
-	i += 2
-	if isPrime(i):
-		# print(i)
-		primes.append(i)
-primes.pop()
-print(sum(primes))
+sieve = [True]*(2000000)
+sieve[0] = False
+sieve[1] = False
+
+mysum = 0
+for n in range(2, len(sieve)):
+    if not sieve[n]:
+        continue
+    mysum += n
+    i = n*2
+    for i in range(n*2,len(sieve),n):
+        sieve[i] = False
+
+print(mysum)

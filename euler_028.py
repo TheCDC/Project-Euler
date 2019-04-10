@@ -82,8 +82,8 @@ def brute_force(n):
 
 def main():
     # print(corner_sum(2))
-    # print(super_sum((1001 - 1) // 2))
-    print(brute_force(1001))
+    print(super_sum((1001 - 1) // 2))
+    # print(brute_force(1001))
 
 
 if __name__ == '__main__':

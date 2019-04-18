@@ -62,28 +62,30 @@ def super_sum(n):
     """
     return sum(corner_sum(i) for i in range(n + 1))
 
-def brute_force(n):
-    s = 0
+
+def generate_corners(n):
     square_size = 1
     cursor = 1
-    while square_size<=n:
+    while square_size <= n:
         skip_length = square_size-2
         if square_size > 1:
             for i in range(4):
                 cursor += skip_length + 1
-                s += cursor
+                yield cursor
         else:
-            s += 1
+            yield 1
 
         square_size += 2
-    return s
-        
+
+
+def brute_force(n):
+    return sum(generate_corners(n))
 
 
 def main():
     # print(corner_sum(2))
     print(super_sum((1001 - 1) // 2))
-    # print(brute_force(1001))
+    print(brute_force(1001))
 
 
 if __name__ == '__main__':

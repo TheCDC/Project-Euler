@@ -3,3 +3,4 @@ euler_*.build/*
 bin/*/*.build
 bin/*/*.exe
 bin/*/*.txt
+.vscode/*

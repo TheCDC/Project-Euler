@@ -16,6 +16,7 @@ If the product of these four fractions is given in its lowest common
 terms, find the value of the denominator.
 """
 from typing import List
+from utils import reduce_fraction
 
 
 def is_trivial(f):
@@ -67,7 +68,8 @@ def main():
         print(f, c)
         p[0] *= c[0]
         p[1] *= c[1]
-    print("Product:", p)
+    reduced = reduce_fraction(p)
+    print(*reduced, sep='/')
 
 
 if __name__ == '__main__':

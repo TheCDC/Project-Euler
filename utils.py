@@ -3,6 +3,8 @@ import collections
 import pprint
 import math
 from functools import lru_cache
+from typing import Tuple, List
+from collections import Counter
 
 
 def numprod(l, default=1):
@@ -34,7 +36,7 @@ def isPrime(n):
     return True
 
 
-def primeFactors(n):
+def primeFactors(n) -> List:
     """Return all prime factors of a number.
     Strategy: loop up to sqrt(n), divide n by any prime factors
     found along the way until n is prime."""
@@ -137,6 +139,18 @@ def prime_sieve(n):
     for i, a in enumerate(sieve):
         if a:
             yield i + 1
+
+
+def reduce_fraction(f: Tuple[int, int]):
+    n_facts = Counter(primeFactors(f[0]))
+    d_facts = Counter(primeFactors(f[1]))
+    final = {}
+    for base in n_facts:
+        final.update({base: min(n_facts[base], d_facts[base])})
+    divisor = 1
+    for base, exponent in final.items():
+        divisor *= base**exponent
+    return (f[0]/divisor, f[1]/divisor)
 
 
 def main():

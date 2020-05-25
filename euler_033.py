@@ -58,12 +58,16 @@ def find_all_examples():
         for c in cancel(f):
             if c[0]/c[1] == f[0]/f[1]:
                 # print(f, c)
-                yield f
+                yield f, c
 
 
 def main():
-    for f in find_all_examples():
-        print(f)
+    p = [1, 1]
+    for f, c in find_all_examples():
+        print(f, c)
+        p[0] *= c[0]
+        p[1] *= c[1]
+    print("Product:", p)
 
 
 if __name__ == '__main__':

@@ -123,6 +123,22 @@ def fact(n):
     return p
 
 
+def prime_sieve(n):
+    # 1,2,3...
+    sieve = [True for i in range(n)]
+    sieve[0] = False
+    for i in range(len(sieve)):
+        if sieve[i]:
+            v = i + 1
+            j = v*2
+            while j < len(sieve)+1:
+                sieve[j-1] = False
+                j += v
+    for i, a in enumerate(sieve):
+        if a:
+            yield i + 1
+
+
 def main():
     print(numrepr(13456783, 2))
 

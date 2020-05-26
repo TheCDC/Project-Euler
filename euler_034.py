@@ -106,7 +106,7 @@ def main2():
 def main():
     assert is_match(145), 'yikes'
     start_time = default_timer()
-    print(test(145))
+    # print(test(145))
     # find an upper bound on num of digits
     ndigits = 1
     found = 0
@@ -116,16 +116,17 @@ def main():
         if dfsum(digit_string) < digit_string:
             found = digit_string
             break
-    print(found, 'max digits=', len(str(found)))
+    # print(found, 'max digits=', len(str(found)))
     upper_bound = 10**(len(str(found)))
     s = 0
     for n in range(1, upper_bound):
         # for n in range(10**7, 2*10**7):
         if is_match(n):
-            print('FOUND', n)
+            # print('FOUND', n)
             s += n
         elif n % 1000000 == 0:
-            print('progress', n, default_timer() - start_time)
+            # print('progress', n, default_timer() - start_time)
+            pass
     print(s)
 
 

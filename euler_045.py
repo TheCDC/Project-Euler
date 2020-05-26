@@ -7,6 +7,7 @@ We do that by inverting the T, P, and H functions
 
 
 def quadratic(a, b, c) -> float:
+    """ax^2 + bx + c = 0"""
     sq = (b**2 - 4 * a * c)**(1 / 2)
     denom = 2 * a
     return max((-b + sq) / denom, (-b - sq) / denom)

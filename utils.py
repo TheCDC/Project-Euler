@@ -118,6 +118,8 @@ def numrepr(n, base):
 
 
 def fact(n):
+    if n == 0:
+        return 1
     p = n
     while n > 1:
         n -= 1

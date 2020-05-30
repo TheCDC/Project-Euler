@@ -15,46 +15,12 @@ denominator.
 If the product of these four fractions is given in its lowest common
 terms, find the value of the denominator.
 """
-from typing import List
-from utils import reduce_fraction
+from typing import List, Set, Generator, Tuple
+from utils import reduce_fraction #hand-written
+from timeit import default_timer
 
 
-def is_trivial(f):
-    return f[0] % 10 == 0 and f[1] % 10 == 0
-
-
-def shared_digits(f):
-    numerator = f[0]
-    denominator = f[1]
-    return set(str(numerator)) & set(str(denominator))
-
-
-def can_cancel(f):
-    return len(shared_digits(f)) > 0
-
-
-def delete_digit(n, d):
-    ds = list(str(n))
-    ds.remove(str(d))
-    return int(''.join(ds))
-
-
-def cancel(f: List[int]):
-    for d in shared_digits(f):
-        newf = (delete_digit(f[0], d), delete_digit(f[1], d))
-        if newf[1] > 0:
-            yield newf
-
-
-def generate_fractions():
-    for i in range(10, 99+1):
-        for j in range(i+1, 99+1):
-            f = (i, j)
-            if can_cancel(f) and not is_trivial(f):
-                yield f
-
-
-def find_all_examples():
+def find_all_examples() -> Generator[Tuple[int, int], None, None]:
     for f in generate_fractions():
         for c in cancel(f):
             if c[0]/c[1] == f[0]/f[1]:
@@ -62,14 +28,50 @@ def find_all_examples():
                 yield f, c
 
 
+def cancel(f: List[int]):
+    for d in shared_digits(f):
+        cancelled_fraction = (delete_digit(f[0], d), delete_digit(f[1], d))
+        if cancelled_fraction[1] > 0:
+            yield cancelled_fraction
+
+
+def generate_fractions() -> Generator[Tuple[int, int], None, None]:
+    for i in range(10, 99+1):
+        for j in range(i+1, 99+1):
+            f = (i, j)
+            if can_cancel(f) and not is_trivial(f):
+                yield f
+
+
+def is_trivial(f: Tuple[int, int]) -> bool:
+    return f[0] % 10 == 0 and f[1] % 10 == 0
+
+
+def can_cancel(f: Tuple[int, int]) -> bool:
+    return len(shared_digits(f)) > 0
+
+
+def shared_digits(f: Tuple[int, int]) -> Set[str]:
+    numerator = f[0]
+    denominator = f[1]
+    return set(str(numerator)) & set(str(denominator))
+
+
+def delete_digit(n: int, d: int) -> int:
+    ds = list(str(n))
+    ds.remove(str(d))
+    return int(''.join(ds))
+
+
 def main():
+    start = default_timer()
     p = [1, 1]
     for f, c in find_all_examples():
-        print(f, c)
+        # print(f, c)
         p[0] *= c[0]
         p[1] *= c[1]
     reduced = reduce_fraction(p)
-    print(*reduced, sep='/')
+    print('/'.join(map(str, reduced)), default_timer() - start, 'seconds')
 
 
 if __name__ == '__main__':

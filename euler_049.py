@@ -21,27 +21,26 @@ from itertools import combinations
 
 def count_permutations():
     # start by generating primes
-    mymap = dict()
+    digits_to_primes = dict()
 
     for p in prime_sieve(10000):
         # minimum digits
         if len(str(p)) < 4:
             continue
-        # associate all primes with the same multisets of digits.
+        # associate all primes that have the same multisets of digits.
         key = ''.join(sorted(str(p)))
-        if key in mymap:
-            mymap[key].append(p)
+        if key in digits_to_primes:
+            digits_to_primes[key].append(p)
         else:
-            mymap.update({key: [p]})
+            digits_to_primes.update({key: [p]})
 
-    for k in mymap:
-        # Take primes the equal multisets of digits three at a time to find the second 3-sequence.
+    for family in digits_to_primes:
         # Some 'families' have more than 3 members so take combinations three at a time
-        # and check for a constant delta between those primes.
-        for comb in combinations(mymap[k], 3):
+        for comb in combinations(digits_to_primes[family], 3):
 
             s = list(sorted(comb))
 
+            # check for a constant delta across the combination
             delta = s[1] - s[0]
             for i in range(1, len(s)):
                 if s[i] - s[i-1] != delta:

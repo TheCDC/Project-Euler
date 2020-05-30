@@ -18,12 +18,13 @@ NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 What's the largest truncatable prime? How many digits long is it?
 Maybe I can generate them.
 """
-from utils import isPrime, prime_sieve
-
+from utils import isPrime  # custom prime check
+from timeit import default_timer
 DIGITS = "1234567890"
 
 
 def generate_truncatable_primes(s=""):
+    """Forward generate strings representing truncatable prime numbers."""
     if len(s) > 0 and is_truncatable(int(s)):
         yield s
     for d in DIGITS:
@@ -31,12 +32,6 @@ def generate_truncatable_primes(s=""):
         v = int(sv)
         if isPrime(v):
             yield from generate_truncatable_primes(sv)
-
-
-def pretest(n):
-    s = str(n)
-    if not (isPrime(int(s[0])) and isPrime(int(s[-1]))):
-        return False
 
 
 def is_truncatable(n):
@@ -63,11 +58,12 @@ def test():
 def main():
     # test()
     # print(list(prime_sieve(97)))
+    start = default_timer()
     s = 0
     for p in generate_truncatable_primes():
         print(p)
         s += int(p)
-    print("ANS:", s)
+    print("ANS:", s, "in", default_timer() - start, 'seconds')
 
 
 if __name__ == '__main__':

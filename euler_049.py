@@ -14,20 +14,21 @@ increasing sequence.
 What 12-digit number do you form by concatenating the three terms in this
 sequence?
 """
+from utils import TimingContext
 from utils import prime_sieve
 from collections import Counter
 from itertools import combinations
 
 
 def count_permutations():
-    # start by generating primes
+    # start by generating 4-digit primes
     digits_to_primes = dict()
 
     for p in prime_sieve(10000):
-        # minimum digits
+        # check number of digits
         if len(str(p)) < 4:
             continue
-        # associate all primes that have the same multisets of digits.
+        # group primes by multisets of their digits.
         key = ''.join(sorted(str(p)))
         if key in digits_to_primes:
             digits_to_primes[key].append(p)
@@ -35,7 +36,7 @@ def count_permutations():
             digits_to_primes.update({key: [p]})
 
     for family in digits_to_primes:
-        # Some 'families' have more than 3 members so take combinations three at a time
+        # We don't know if some of these groups have more than 3 members so take combinations three at a time
         for comb in combinations(digits_to_primes[family], 3):
 
             s = list(sorted(comb))
@@ -49,12 +50,18 @@ def count_permutations():
                 yield s
 
 
-def main():
+def solve():
     known = set([1487, 4817, 8147])
     ps = list(count_permutations())
     for p in ps:
         if set(p) != known:
-            print(''.join(map(str, p)))
+            return(''.join(map(str, p)))
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
 
 
 if __name__ == '__main__':

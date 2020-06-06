@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from utils import TimingContext
+from utils import numprod
 nstr = """73167176531330624919225119674426574742355349194934
 96983520312774506326239578318016984801869478851843
 85861560789112949495459501737958331952853208805511
@@ -24,8 +26,20 @@ nstr = ''.join(nstr.split('\n'))
 # print(nstr)
 
 n = 13
-subs = [nstr[i:i+n] for i in range(0,len(nstr))]
+subs = [nstr[i:i+n] for i in range(0, len(nstr))]
 # print(subs)
 
-from utils import numprod
-print(sorted([(i,numprod([int(j) for j in i])) for i in subs], key=lambda x: x[1])[-1][1])
+
+def solve():
+    return(sorted([(i, numprod([int(j) for j in i]))
+                   for i in subs], key=lambda x: x[1])[-1][1])
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
+
+
+if __name__ == '__main__':
+    main()

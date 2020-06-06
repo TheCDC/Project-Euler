@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 
+from utils import TimingContext
+
+
 def isPrime(n):
     for i in range(2, int(n**(1 / 2)) + 1):
         if n % i == 0:
@@ -31,7 +34,7 @@ def numprod(l, default=1):
     return p
 
 
-def main():
+def solve():
     facts = [(i, pfactors(i)) for i in range(1, 21)]
     counts = dict()
     for i in facts:
@@ -42,6 +45,13 @@ def main():
     for i in counts.items():
         out *= i[0]**i[1]
     assert out == 232792560, "incorrect"  # found answer on paper
-    print(out)
+    return out
+
+
+def main():
+    with TimingContext() as tc:
+        print(solve(), tc.get_duration())
+
+
 if __name__ == '__main__':
     main()

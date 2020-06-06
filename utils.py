@@ -5,6 +5,7 @@ import math
 from functools import lru_cache
 from typing import Tuple, List
 from collections import Counter
+from timeit import default_timer
 
 
 def numprod(l, default=1):
@@ -153,6 +154,24 @@ def reduce_fraction(f: Tuple[int, int]):
     for base, exponent in final.items():
         divisor *= base**exponent
     return (f[0]/divisor, f[1]/divisor)
+
+
+class TimingContext:
+    def __init__(self):
+        self.start_time = default_timer()
+        self.end_time = self.start_time
+        self.duration = 0
+
+    def __enter__(self):
+        self.start_time = default_timer()
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.end_time = default_timer()
+        self.duration = self.end_time-self.start_time
+
+    def get_duration(self):
+        return default_timer() - self.start_time
 
 
 def main():

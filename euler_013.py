@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from utils import TimingContext
 mystr = """ 37107287533902102798797998220837590246510135740250
 46376937677490009712648124896970078050417018260538
 74324986199524741059474233309513058123726617309629
@@ -100,6 +101,18 @@ mystr = """ 37107287533902102798797998220837590246510135740250
 20849603980134001723930671666823555245252804609722
 53503534226472524250874054075591789781264330331690"""
 
-ns = [int(i) for i in mystr.split()]
-# print(sum(ns))
-print(str(sum(ns))[:10])
+
+def solve():
+    ns = [int(i) for i in mystr.split()]
+    # print(sum(ns))
+    return (str(sum(ns))[:10])
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
+
+
+if __name__ == '__main__':
+    main()

@@ -44,6 +44,7 @@ Repeat by collapsing all remaining options into the next row and so on.
 """
 
 
+from utils import TimingContext
 triangle = """                      75
                                   95 64
                                  17 47 82
@@ -81,9 +82,16 @@ def max_path(tri):
     # print(cur[0])
 
 
-def main():
+def solve():
     # print(pairwise(max, [8, 5, 3, 9]))
-    print(max_path(triangle)[0])
+    return(max_path(triangle)[0])
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
+
 
 if __name__ == '__main__':
     main()

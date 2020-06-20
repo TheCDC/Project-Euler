@@ -27,8 +27,10 @@ expression that produces the maximum number of primes for consecutive
 values of n, starting with n = 0.
 """
 
+from utils import TimingContext
 from utils import isPrime, prime_sieve
 import timeit
+
 
 def quadratic(a, b, c) -> float:
     sq = (b**2 - 4 * a * c)**(1 / 2)
@@ -47,7 +49,7 @@ def naive():
             def func(x):
                 return x**2 + a*x + b
             idx = 0
-            item = func(0) #func(0) == b so b>= 2
+            item = func(0)  # func(0) == b so b>= 2
             while isPrime(item):
                 item = func(idx)
                 idx += 1
@@ -58,11 +60,14 @@ def naive():
     return answer[0]*answer[1]
 
 
+def solve():
+    return naive()
+
+
 def main():
-    start_time = timeit.default_timer()
-    print(naive())
-    elapsed = timeit.default_timer() - start_time
-    print("naive", elapsed, "seconds")
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
 
 
 if __name__ == '__main__':

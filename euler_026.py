@@ -35,6 +35,7 @@ Conjecture 3:  Fractions of the form a/d expressed in base b have recurring expa
 
 
 
+from utils import TimingContext
 from utils import isPrime
 from math import floor
 def does_repeat(n):
@@ -60,26 +61,31 @@ def long_division_digits(n, x):
     divisor = x
     dividend = n
     digit_shift = 1
-    remainder = -1
-    # while remainder != 0:
-    for i in range(10):
+
+    for _ in range(10):
         d = floor(10*dividend/divisor) % 10
         result = result*10 + d
-        remainder = n*(result / (10**digit_shift))
+        # remainder = n*(result / (10**digit_shift))
         dividend *= 10
 
         digit_shift += 1
     return result
 
 
-def main():
+def solve():
     # print(get_period(3))
     # print(get_period(7))
     # print(get_period(983))
     # print(long_division_digits(2, 7))
     fx = sorted([(i, get_period(i))
                  for i in range(1, 1000+1)], key=lambda t: t[1], reverse=True)
-    print(fx[0])
+    return(fx[0][0])
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
 
 
 if __name__ == '__main__':

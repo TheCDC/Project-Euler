@@ -21,14 +21,17 @@ Which starting number, under one million, produces the longest chain?
 NOTE: Once the chain starts the terms are allowed to go above one million.
 """
 
+from utils import TimingContext
 import functools
 
 
 @functools.lru_cache(maxsize=4096*2)
 def collatz(n) -> int:
-    return (n // 2)*((n+1)%2) + (3 * n + 1)*(n%2)
+    return (n // 2)*((n+1) % 2) + (3 * n + 1)*(n % 2)
+
 
 seq_dict = dict()
+
 
 def seqlen(n) -> int:
     nn = n
@@ -39,22 +42,22 @@ def seqlen(n) -> int:
         except KeyError:
             pass
         c = collatz(n)
-        n=c
+        n = c
         l += 1
     l += 1
-    seq_dict.update({n:l})
+    seq_dict.update({n: l})
     # print(nn,l)
     return l
 
 
-def main():
-        # print(seqlen(13))
-        # print(seqlen(100))
-        # print(seqlen(10000))
+def solve():
+    # print(seqlen(13))
+    # print(seqlen(100))
+    # print(seqlen(10000))
 
     longest = 0
     N = 0
-    for i in range(2,1000000):
+    for i in range(2, 1000000):
         n = seqlen(i)
         if n > longest:
             longest = n
@@ -62,7 +65,14 @@ def main():
     # results = [(i,seqlen(i)) for i in range(2, 1000000)]
     # with open("014.txt",'w') as f:
     #     f.write('\n'.join(results))
-    print(N)
+    return(N)
 
-if __name__ == "__main__":
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
+
+
+if __name__ == '__main__':
     main()

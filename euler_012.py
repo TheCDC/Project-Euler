@@ -23,6 +23,7 @@ What is the value of the first triangle number to have over five hundred
 divisors?
 """
 
+from utils import TimingContext
 from utils import numDivisors
 
 # print(numDivisors(68719476735), primeFactors(68719476735))
@@ -35,11 +36,16 @@ def tris():
         i += 1
 
 
-def main():
+def solve():
     for tri in tris():
         if numDivisors(tri) > 500:
-            print(tri)
-            break
+            return(tri)
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
 
 
 if __name__ == '__main__':

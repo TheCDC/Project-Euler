@@ -18,17 +18,25 @@ research for yourself.
 How many Sundays fell on the first of the month during the twentieth
 century (1 Jan 1901 to 31 Dec 2000)?
 """
+from utils import TimingContext
 from datetime import date
 
 
-def main():
+def solve():
     c = 0
-    for year in range(1901,2001):
-        for month in range(1,13):
-            d = date(year,month,1)
+    for year in range(1901, 2001):
+        for month in range(1, 13):
+            d = date(year, month, 1)
             if d.weekday() == 6:
                 c += 1
-    print(c)
- 
+    return(c)
+
+
+def main():
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
+
+
 if __name__ == '__main__':
     main()

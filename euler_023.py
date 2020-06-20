@@ -26,6 +26,7 @@ sum of two abundant numbers.
 What can be said about the sum of two adundant numbers?
 
 """
+from utils import TimingContext
 import utils
 
 
@@ -36,7 +37,7 @@ def is_abundant(n):
     return sum(ds) > n
 
 
-def problem():
+def solve():
     # given: upper bound is 28123
     upper_bound = 28123
     abundants = [i for i in range(1, upper_bound + 1) if is_abundant(i)]
@@ -58,7 +59,9 @@ def problem():
 
 
 def main():
-    print(problem())
+    with TimingContext() as tc:
+        s = solve()
+        print(s, tc.get_duration())
 
 
 if __name__ == '__main__':

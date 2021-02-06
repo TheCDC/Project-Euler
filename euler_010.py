@@ -3,7 +3,8 @@ from utils import TimingContext
 
 
 def solve():
-    sieve = [True]*(2000000)
+    
+    sieve = [True for _ in range(2000000)]
     sieve[0] = False
     sieve[1] = False
 

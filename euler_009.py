@@ -4,10 +4,10 @@ from utils import TimingContext
 
 
 def solve():
-    SUM = 1000
-    for c in range(1, SUM):
-        for a in range(1, SUM-c):
-            b = SUM - a - c
+    target_sum = 1000
+    for c in range(1, target_sum):
+        for a in range(1, target_sum-c):
+            b = target_sum - a - c
             if a**2 + b**2 == c**2:
                 return(a*b*c)
 

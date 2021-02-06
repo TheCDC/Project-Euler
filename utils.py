@@ -6,6 +6,7 @@ from functools import lru_cache
 from typing import Tuple, List
 from collections import Counter
 from timeit import default_timer
+from itertools import permutations
 
 
 def numprod(l, default=1):
@@ -154,6 +155,11 @@ def reduce_fraction(f: Tuple[int, int]):
     for base, exponent in final.items():
         divisor *= base**exponent
     return (f[0]/divisor, f[1]/divisor)
+
+
+def generate_pandigitals(start=1, stop=10):
+    for i in range(start, stop):
+        yield from permutations(set(range(1, i + 1)))
 
 
 class TimingContext:

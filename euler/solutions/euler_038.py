@@ -56,11 +56,13 @@ def pandigital_satisfies(p) -> bool:
     return 0
 
 
-m = 0
-for p in generate_pandigitals(9):
-    p = int("".join(map(str, p)))
-    s = pandigital_satisfies(p)
-    if s > 0:
-        m = max(m, p)
-        print(p, s)
-print(m)
+if __name__ == "__main__":
+
+    m = 0
+    for p in generate_pandigitals(9):
+        p = int("".join(map(str, p)))
+        s = pandigital_satisfies(p)
+        if s > 0:
+            m = max(m, p)
+            print(p, s)
+    print(m)

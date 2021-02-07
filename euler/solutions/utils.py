@@ -8,6 +8,13 @@ from collections import Counter
 from timeit import default_timer
 
 
+@lru_cache(maxsize=1000000)
+def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+
 def numprod(l, default=1):
     try:
         p = l[0]
@@ -28,7 +35,7 @@ def isPrime(n):
     elif n == 1:
         return False
     try:
-        for i in range(2, int(n**(1 / 2)) + 1):
+        for i in range(2, int(n ** (1 / 2)) + 1):
             if n % i == 0:
                 return False
     except Exception as e:
@@ -49,7 +56,7 @@ def primeFactors(n) -> List:
     # check if reduction is complete
     while not isPrime(n) and n > 1:
         # locate factors below sqrt(n)
-        for i in range(2, int(n**(1 / 2)) + 1):
+        for i in range(2, int(n ** (1 / 2)) + 1):
             if n % i == 0 and isPrime(i):
                 found_factors.append(i)
                 n = n // i
@@ -80,7 +87,7 @@ def divisors(n):
         return [1]
     l = set()
     # only needs to loop to n^(1/2)
-    for i in range(1, math.ceil(n**(1 / 2)) + 1):
+    for i in range(1, math.ceil(n ** (1 / 2)) + 1):
         if n % i == 0:
             l.update([i, n // i])
     return sorted(l)
@@ -88,7 +95,7 @@ def divisors(n):
 
 def nthDigit(n, d, base=10):
     """Find digit at index n."""
-    return (n % (base**(d + 1))) // (base**(d))
+    return (n % (base ** (d + 1))) // (base ** (d))
 
 
 def numDigits(n, base=10):
@@ -110,12 +117,12 @@ def digits(n, b):
 def numrepr(n, base):
 
     if base <= 10:
-        d = ''
+        d = ""
     else:
-        d = ':'
-    return d.join([
-        str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)
-    ])  # + "_{}".format(base)
+        d = ":"
+    return d.join(
+        [str(nthDigit(n, i, base)) for i in range(numDigits(n, base), -1, -1)]
+    )  # + "_{}".format(base)
 
 
 def fact(n):
@@ -135,9 +142,9 @@ def prime_sieve(n):
     for i in range(len(sieve)):
         if sieve[i]:
             v = i + 1
-            j = v*2
-            while j < len(sieve)+1:
-                sieve[j-1] = False
+            j = v * 2
+            while j < len(sieve) + 1:
+                sieve[j - 1] = False
                 j += v
     for i, a in enumerate(sieve):
         if a:
@@ -152,8 +159,8 @@ def reduce_fraction(f: Tuple[int, int]):
         final.update({base: min(n_facts[base], d_facts[base])})
     divisor = 1
     for base, exponent in final.items():
-        divisor *= base**exponent
-    return (f[0]/divisor, f[1]/divisor)
+        divisor *= base ** exponent
+    return (f[0] / divisor, f[1] / divisor)
 
 
 class TimingContext:
@@ -168,7 +175,7 @@ class TimingContext:
 
     def __exit__(self, type, value, traceback):
         self.end_time = default_timer()
-        self.duration = self.end_time-self.start_time
+        self.duration = self.end_time - self.start_time
 
     def get_duration(self):
         return default_timer() - self.start_time
@@ -178,5 +185,5 @@ def main():
     print(numrepr(13456783, 2))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

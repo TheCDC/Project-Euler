@@ -17,9 +17,29 @@ What is the millionth lexicographic permutation of the digits 0, 1, 2, 3,
 from typing import List
 
 
-def pack(magnitude:int, radixes:List[int]) -> int:
+def pack(digits: List[int], radixes: List[int]) -> int:
     n = 0
-    for r in radixes:
-        n = n*r + magnitude%r
-        magnitude = magnitude//r
+    p = 1
+    for digit, radix in zip(digits, radixes):
+        n = n * radix + digit
     return n
+
+
+def unpack(n: int, radixes: List[int]) -> List[int]:
+    digits = []
+    for r in radixes:
+        digits.append(n % r)
+        n = n // r
+    return digits
+
+
+def choose_by_unpacked(unpacked: List[int], alphabet: List):
+    l = list((alphabet))
+    out = []
+    for up in unpacked:
+        out.append(l.pop(up))
+    return list((out))
+
+
+if __name__ == "__main__":
+    assert choose_by_unpacked(unpack(1, [1, 2, 3]), "abc") == ["a", "c", "b"]

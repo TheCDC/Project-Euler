@@ -4,7 +4,10 @@
 			"path": "."
 		}
 	],
-	"settings": {},
+	"settings": {
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black"
+	},
 	"extensions": {
 		"recommendations": [
 			"ms-python.vscode-pylance"

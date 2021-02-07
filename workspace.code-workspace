@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "euler"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black"
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.vscode-pylance"
+		]
+	},
+	"recommendations": [
+		"ms-python.vscode-pylance",
+		"donjayamanne.python-extension-pack"
+	]
+}

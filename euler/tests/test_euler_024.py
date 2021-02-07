@@ -1,4 +1,4 @@
-from euler.solutions.euler_024 import nth_permutation, pack, unpack, choose_by_unpacked
+from euler.solutions.euler_024 import nth_permutation, pack, unpack
 from euler.solutions.utils import factorial
 
 

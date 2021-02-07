@@ -32,23 +32,11 @@ def unpack(n: int, radixes: List[int]) -> List[int]:
     return digits
 
 
-def choose_by_unpacked(unpacked: List[int], alphabet: List):
-    l = list((alphabet))
-    out = []
-    for up in unpacked:
-        out.append(l.pop(up))
-    return list((out))
-
-
 def nth_permutation(tokens: List, index: int, radixes: List[int]):
     choice_indices = unpack(index, radixes)
     ts = list(tokens)
     out = [ts.pop(i) for i in choice_indices]
     return out
-
-
-def nth_permutation(tokens: List, index: int, radixes: List[int]):
-    return choose_by_unpacked(unpack(index, radixes), tokens)
 
 
 if __name__ == "__main__":

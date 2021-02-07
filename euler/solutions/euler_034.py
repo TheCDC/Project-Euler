@@ -20,7 +20,7 @@ Conjecture: no base-10 number with more than 8 digits can satisfy the stated pro
 Consider the number 9. As you add 9s to the end n_next = n*10+9 while f(n_next) = n+9!
 """
 
-from utils import fact, numDigits, nthDigit
+from euler.solutions.utils import fact, numDigits, nthDigit
 from timeit import default_timer
 from functools import lru_cache
 
@@ -51,46 +51,46 @@ def is_match(n):
         if s > n:
             return False
         # if s can't grow fast enough to catch with with n as we traverse the digits
-        if s + fact_memoized(9)*(len(sn)-idx) < n:
+        if s + fact_memoized(9) * (len(sn) - idx) < n:
             return False
     return s == n
 
 
-DIGITS = '1234567890'
+DIGITS = "1234567890"
 
 bad = set()
 
 
-def generate_matches(s=''):
+def generate_matches(s=""):
     if s in bad:
         return
     if len(s) > 8:
         return
     # print(s)
 
-    n = int(s) if s != '' else 0
+    n = int(s) if s != "" else 0
     if is_match(n):
         yield s
 
     for d in DIGITS:
-        s_next = s+d
+        s_next = s + d
         n_next = int(s_next)
         digit_fact_sum_next = dfsum(n_next)
         # digit fact sum already too big
-        if digit_fact_sum_next > fact_memoized(9)*7:
+        if digit_fact_sum_next > fact_memoized(9) * 7:
             bad.add(s)
             continue
         # digit fact sum can't catch up
-        if n_next*10 > n_next+fact_memoized(9):
+        if n_next * 10 > n_next + fact_memoized(9):
             bad.add(s)
             continue
-        yield from generate_matches(s_next.lstrip('0'))
+        yield from generate_matches(s_next.lstrip("0"))
 
 
 def nines():
     n = 1
     while True:
-        yield int('9'*n)
+        yield int("9" * n)
         n += 1
 
 
@@ -100,24 +100,24 @@ def test(n):
 
 def main2():
     for m in generate_matches():
-        print('FOUND', m)
+        print("FOUND", m)
 
 
 def main():
-    assert is_match(145), 'yikes'
+    assert is_match(145), "yikes"
     start_time = default_timer()
     # print(test(145))
     # find an upper bound on num of digits
     ndigits = 1
     found = 0
     for digit_string in nines():
-        if dfsum(int('1'*len(str(digit_string)))) > digit_string:
+        if dfsum(int("1" * len(str(digit_string)))) > digit_string:
             continue
         if dfsum(digit_string) < digit_string:
             found = digit_string
             break
     # print(found, 'max digits=', len(str(found)))
-    upper_bound = 10**(len(str(found)))
+    upper_bound = 10 ** (len(str(found)))
     s = 0
     for n in range(1, upper_bound):
         # for n in range(10**7, 2*10**7):
@@ -130,5 +130,5 @@ def main():
     print(s)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

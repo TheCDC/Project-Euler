@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from utils import isPrime
+from euler.solutions.utils import isPrime
+
 """
 Project Euler Problem 50
 ========================
@@ -46,34 +47,31 @@ def main():
     debug = False
     N = 1000000
     if debug:
-        print('Generating primes')
+        print("Generating primes")
     relevant_primes = list(generate_by_sieve(N))
     # print(list(generate_by_sieve(1000000)))
     if debug:
-        print('Pruning primes')
+        print("Pruning primes")
     c = 0
     while relevant_primes[-1] + relevant_primes[-2] > 1000000:
         relevant_primes.pop()
         c += 1
 
     if debug:
-        print('Pruned', c)
-        print('Generating intermediate sums')
-    intermediate_sums = [
-        sum(relevant_primes[:i]) for i in range(len(relevant_primes))
-    ]
+        print("Pruned", c)
+        print("Generating intermediate sums")
+    intermediate_sums = [sum(relevant_primes[:i]) for i in range(len(relevant_primes))]
 
-    print('Pruned', c, 'primes')
+    print("Pruned", c, "primes")
     if debug:
-        print('Searching for matching sequence')
+        print("Searching for matching sequence")
     for seqlen in range(N, 1, -1):
         if debug:
             if seqlen % 10000 == 0:
                 print(seqlen)
         for offset in range(N - seqlen):
             try:
-                s = intermediate_sums[offset
-                                      + seqlen] - intermediate_sums[offset]
+                s = intermediate_sums[offset + seqlen] - intermediate_sums[offset]
             except IndexError:
                 break
             if s < 1000000:
@@ -82,5 +80,5 @@ def main():
                     quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

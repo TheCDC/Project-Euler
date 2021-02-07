@@ -27,11 +27,12 @@ expression that produces the maximum number of primes for consecutive
 values of n, starting with n = 0.
 """
 
-from utils import isPrime, prime_sieve
+from euler.solutions.utils import isPrime, prime_sieve
 import timeit
 
+
 def quadratic(a, b, c) -> float:
-    sq = (b**2 - 4 * a * c)**(1 / 2)
+    sq = (b ** 2 - 4 * a * c) ** (1 / 2)
     denom = 2 * a
     return max((-b + sq) / denom, (-b - sq) / denom)
 
@@ -40,22 +41,23 @@ def naive():
     """Time complexity something like 2000^2*log(n)*O(the while loop)"""
     res = []
     primes_for_b = list(prime_sieve(1001))
-    for a in range(-1000, 1000+1):
+    for a in range(-1000, 1000 + 1):
         # func(0) = b
         for b in primes_for_b:
 
             def func(x):
-                return x**2 + a*x + b
+                return x ** 2 + a * x + b
+
             idx = 0
-            item = func(0) #func(0) == b so b>= 2
+            item = func(0)  # func(0) == b so b>= 2
             while isPrime(item):
                 item = func(idx)
                 idx += 1
-            if(idx > 39):  # 39 taken from data point in problem statement
+            if idx > 39:  # 39 taken from data point in problem statement
                 # print(a, b, a*b, idx)
                 res.append((a, b, idx))
     answer = sorted(res, key=lambda t: -1, reverse=True)[0]
-    return answer[0]*answer[1]
+    return answer[0] * answer[1]
 
 
 def main():
@@ -65,5 +67,5 @@ def main():
     print("naive", elapsed, "seconds")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

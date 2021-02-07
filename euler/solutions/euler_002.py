@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
 
 
 def solve():
@@ -8,7 +8,7 @@ def solve():
         fibs.append(fibs[-1] + fibs[-2])
     if fibs[-1] > 4000000:
         fibs.pop()
-    return (sum([i for i in fibs if i % 2 == 0]))
+    return sum([i for i in fibs if i % 2 == 0])
 
 
 def main():
@@ -17,5 +17,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

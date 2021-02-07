@@ -1,5 +1,6 @@
 import utils
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
+
 NUM = 600851475143
 
 
@@ -13,5 +14,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

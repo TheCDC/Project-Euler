@@ -33,10 +33,10 @@ Conjecture 3:  Fractions of the form a/d expressed in base b have recurring expa
 """
 
 
-
-
-from utils import isPrime
+from euler.solutions.utils import isPrime
 from math import floor
+
+
 def does_repeat(n):
     return isPrime(n) or ((n % 2 != 0) and (n % 5 != 0))
 
@@ -47,7 +47,7 @@ def get_period(n):
     i = 1
     cache = {}
     while True:
-        remainder = (10*remainder) % n
+        remainder = (10 * remainder) % n
         if remainder in cache:
             return i - cache[remainder]
 
@@ -63,9 +63,9 @@ def long_division_digits(n, x):
     remainder = -1
     # while remainder != 0:
     for i in range(10):
-        d = floor(10*dividend/divisor) % 10
-        result = result*10 + d
-        remainder = n*(result / (10**digit_shift))
+        d = floor(10 * dividend / divisor) % 10
+        result = result * 10 + d
+        remainder = n * (result / (10 ** digit_shift))
         dividend *= 10
 
         digit_shift += 1
@@ -77,10 +77,13 @@ def main():
     # print(get_period(7))
     # print(get_period(983))
     # print(long_division_digits(2, 7))
-    fx = sorted([(i, get_period(i))
-                 for i in range(1, 1000+1)], key=lambda t: t[1], reverse=True)
+    fx = sorted(
+        [(i, get_period(i)) for i in range(1, 1000 + 1)],
+        key=lambda t: t[1],
+        reverse=True,
+    )
     print(fx[0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
 
 
 def solve():
@@ -6,13 +6,13 @@ def solve():
 
     for first in range(100, 1000):
         for second in range(100, 1000):
-            product = first*second
+            product = first * second
             if str(product) == str(product)[::-1]:
                 if product > big:
                     big = product
                     # print(big)
 
-    return (big)
+    return big
     # print(max([i for i in range(100,100**2) if str(i) == str(i)[::-1]]))
 
 
@@ -22,5 +22,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

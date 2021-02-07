@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
 
 
 def isPrime(n):
-    for i in range(2, int(n**(1 / 2)) + 1):
+    for i in range(2, int(n ** (1 / 2)) + 1):
         if n % i == 0:
             return False
     return True
@@ -16,7 +16,7 @@ def pfactors(n):
     if isPrime(n) or n == 4:
         return [n]
     while not isPrime(n):
-        for i in range(2, int(n**(1 / 2)) + 1):
+        for i in range(2, int(n ** (1 / 2)) + 1):
             if isPrime(i) and n % i == 0:
                 res.append(i)
                 n = n // i
@@ -43,7 +43,7 @@ def solve():
                 counts.update({j: max(i[1].count(j), counts.get(j, 0))})
     out = 1
     for i in counts.items():
-        out *= i[0]**i[1]
+        out *= i[0] ** i[1]
     assert out == 232792560, "incorrect"  # found answer on paper
     return out
 
@@ -53,5 +53,5 @@ def main():
         print(solve(), tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

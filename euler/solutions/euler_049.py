@@ -14,8 +14,8 @@ increasing sequence.
 What 12-digit number do you form by concatenating the three terms in this
 sequence?
 """
-from utils import TimingContext
-from utils import prime_sieve
+from euler.solutions.utils import TimingContext
+from euler.solutions.utils import prime_sieve
 from collections import Counter
 from itertools import combinations
 
@@ -29,7 +29,7 @@ def count_permutations():
         if len(str(p)) < 4:
             continue
         # group primes by multisets of their digits.
-        key = ''.join(sorted(str(p)))
+        key = "".join(sorted(str(p)))
         if key in digits_to_primes:
             digits_to_primes[key].append(p)
         else:
@@ -44,7 +44,7 @@ def count_permutations():
             # check for a constant delta across the combination
             delta = s[1] - s[0]
             for i in range(1, len(s)):
-                if s[i] - s[i-1] != delta:
+                if s[i] - s[i - 1] != delta:
                     break
             else:
                 yield s
@@ -55,7 +55,7 @@ def solve():
     ps = list(count_permutations())
     for p in ps:
         if set(p) != known:
-            return(''.join(map(str, p)))
+            return "".join(map(str, p))
 
 
 def main():
@@ -64,5 +64,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

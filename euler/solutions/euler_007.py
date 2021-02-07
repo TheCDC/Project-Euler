@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
 
 
 def isPrime(n):
-    for i in range(2, int(n**(1 / 2)) + 1):
+    for i in range(2, int(n ** (1 / 2)) + 1):
         if n % i == 0:
             return False
     return True
@@ -19,7 +19,7 @@ def solve():
         cur += 1
         if isPrime(cur):
             primes.update({cur})
-    return(max(primes))
+    return max(primes)
 
 
 def main():
@@ -28,5 +28,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

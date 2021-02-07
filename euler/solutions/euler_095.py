@@ -19,7 +19,7 @@ Find the smallest member of the longest amicable chain with no element
 exceeding one million.
 """
 
-from utils import divisors
+from euler.solutions.utils import divisors
 
 
 def proper_divisors(n):
@@ -38,12 +38,13 @@ def chain(n):
         yield n
         dsn = set(divisors(n)) - {n}
         if n > 1000000:
-            raise ValueError('Too large!')
+            raise ValueError("Too large!")
         # print(n, len(dsn))
         n = sum(dsn)
         if n in found:
             break
         found.add(n)
+
 
 # print(divisors(24))
 # print(divisors(12496))

@@ -18,8 +18,9 @@ NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 What's the largest truncatable prime? How many digits long is it?
 Maybe I can generate them.
 """
-from utils import isPrime  # custom prime check
+from euler.solutions.utils import isPrime  # custom prime check
 from timeit import default_timer
+
 DIGITS = "1234567890"
 
 
@@ -28,7 +29,7 @@ def generate_truncatable_primes(s=""):
     if len(s) > 0 and is_truncatable(int(s)):
         yield s
     for d in DIGITS:
-        sv = str(s)+d
+        sv = str(s) + d
         v = int(sv)
         if isPrime(v):
             yield from generate_truncatable_primes(sv)
@@ -40,8 +41,8 @@ def is_truncatable(n):
         return False
     # left to right
     for i in range(1, len(s)):
-        l = int(s[i:len(s)])
-        r = int(s[0:len(s)-i])
+        l = int(s[i : len(s)])
+        r = int(s[0 : len(s) - i])
         if not isPrime(l):
             break
         if not isPrime(r):
@@ -63,8 +64,8 @@ def main():
     for p in generate_truncatable_primes():
         print(p)
         s += int(p)
-    print("ANS:", s, "in", default_timer() - start, 'seconds')
+    print("ANS:", s, "in", default_timer() - start, "seconds")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

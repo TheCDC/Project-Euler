@@ -1,4 +1,4 @@
-from utils import divisors
+from euler.solutions.utils import divisors
 from functools import lru_cache
 
 

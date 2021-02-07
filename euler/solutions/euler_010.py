@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-from utils import TimingContext
+from euler.solutions.utils import TimingContext
 
 
 def solve():
-    sieve = [True]*(2000000)
+    sieve = [True] * (2000000)
     sieve[0] = False
     sieve[1] = False
 
@@ -12,11 +12,11 @@ def solve():
         if not sieve[n]:
             continue
         mysum += n
-        i = n*2
-        for i in range(n*2, len(sieve), n):
+        i = n * 2
+        for i in range(n * 2, len(sieve), n):
             sieve[i] = False
 
-    return(mysum)
+    return mysum
 
 
 def main():
@@ -25,5 +25,5 @@ def main():
         print(s, tc.get_duration())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

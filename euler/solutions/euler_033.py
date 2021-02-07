@@ -16,14 +16,14 @@ If the product of these four fractions is given in its lowest common
 terms, find the value of the denominator.
 """
 from typing import List, Set, Generator, Tuple
-from utils import reduce_fraction #hand-written
+from euler.solutions.utils import reduce_fraction  # hand-written
 from timeit import default_timer
 
 
 def find_all_examples() -> Generator[Tuple[int, int], None, None]:
     for f in generate_fractions():
         for c in cancel(f):
-            if c[0]/c[1] == f[0]/f[1]:
+            if c[0] / c[1] == f[0] / f[1]:
                 # print(f, c)
                 yield f, c
 
@@ -36,8 +36,8 @@ def cancel(f: List[int]):
 
 
 def generate_fractions() -> Generator[Tuple[int, int], None, None]:
-    for i in range(10, 99+1):
-        for j in range(i+1, 99+1):
+    for i in range(10, 99 + 1):
+        for j in range(i + 1, 99 + 1):
             f = (i, j)
             if can_cancel(f) and not is_trivial(f):
                 yield f
@@ -60,7 +60,7 @@ def shared_digits(f: Tuple[int, int]) -> Set[str]:
 def delete_digit(n: int, d: int) -> int:
     ds = list(str(n))
     ds.remove(str(d))
-    return int(''.join(ds))
+    return int("".join(ds))
 
 
 def main():
@@ -71,8 +71,8 @@ def main():
         p[0] *= c[0]
         p[1] *= c[1]
     reduced = reduce_fraction(p)
-    print('/'.join(map(str, reduced)), default_timer() - start, 'seconds')
+    print("/".join(map(str, reduced)), default_timer() - start, "seconds")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

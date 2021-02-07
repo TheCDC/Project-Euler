@@ -23,7 +23,7 @@ What is the value of the first triangle number to have over five hundred
 divisors?
 """
 
-from utils import numDivisors
+from euler.solutions.utils import numDivisors
 
 # print(numDivisors(68719476735), primeFactors(68719476735))
 
@@ -42,5 +42,5 @@ def main():
             break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

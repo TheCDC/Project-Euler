@@ -1,4 +1,4 @@
-from utils import digits
+from euler.solutions.utils import digits
 
 
 def test(n):

@@ -19,7 +19,6 @@ from typing import List
 
 def pack(digits: List[int], radixes: List[int]) -> int:
     n = 0
-    p = 1
     for digit, radix in zip(digits, radixes):
         n = n * radix + digit
     return n
@@ -27,8 +26,8 @@ def pack(digits: List[int], radixes: List[int]) -> int:
 
 def unpack(n: int, radixes: List[int]) -> List[int]:
     digits = []
-    for r in radixes:
-        digits.append(n % r)
+    for r in reversed(radixes):
+        digits.insert(0, n % r)
         n = n // r
     return digits
 
@@ -41,5 +40,17 @@ def choose_by_unpacked(unpacked: List[int], alphabet: List):
     return list((out))
 
 
+def nth_permutation(tokens: List, index: int, radixes: List[int]):
+    choice_indices = unpack(index, radixes)
+    ts = list(tokens)
+    out = [ts.pop(i) for i in choice_indices]
+    return out
+
+
+def nth_permutation(tokens: List, index: int, radixes: List[int]):
+    return choose_by_unpacked(unpack(index, radixes), tokens)
+
+
 if __name__ == "__main__":
-    assert choose_by_unpacked(unpack(1, [1, 2, 3]), "abc") == ["a", "c", "b"]
+    print(unpack(999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
+    print(nth_permutation(list(range(10)), 999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))

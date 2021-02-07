@@ -1,4 +1,5 @@
-from euler.solutions.euler_024 import pack, unpack, choose_by_unpacked
+from euler.solutions.euler_024 import nth_permutation, pack, unpack, choose_by_unpacked
+from euler.solutions.utils import factorial
 
 
 def test_pack_base10():
@@ -24,59 +25,47 @@ def test_pack_base16():
 
 
 def test_pack_mixed_radix():
-    assert pack([2, 1], [2, 10]) == 11
+    assert pack([1, 3, 0, 0, 0], [5, 4, 3, 2, 1]) == 42
 
 
-def test_pack_base_factorial3():
-    assert pack([2, 1, 0], [3, 2, 1]) == 5
-    assert pack([0, 1, 2], [3, 2, 1]) == 0
+def test_pack_example():
+    # Decimal system
+    assert pack([4, 2], [10, 10]) == 42
+
+    # Binary system
+    assert pack([1, 0, 1, 0, 1, 0], [2, 2, 2, 2, 2, 2]) == 42
+
+    # Factorial system
+    assert pack([1, 3, 0, 0, 0], [5, 4, 3, 2, 1]) == 42
 
 
-def test_pack_basefactorial():
-    assert (
-        pack([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-        == 3628800 - 1
-    )
-    assert pack([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == 0
+def test_pack_base_factorial3_last():
+    assert pack([0, 1, 2], [1, 2, 3]) == 5
 
 
 def test_unpack_base10():
-    assert unpack(321, [10, 10, 10]) == [1, 2, 3]
+    assert unpack(321, [10, 10, 10]) == [3, 2, 1]
     assert unpack(555, [10, 10, 10]) == [5, 5, 5]
 
 
 def test_unpack_base16():
-    assert unpack(0xABCD, [16, 16, 16, 16]) == [0xD, 0xC, 0xB, 0xA]
+    assert unpack(0xABCD, [16, 16, 16, 16]) == [
+        0xA,
+        0xB,
+        0xC,
+        0xD,
+    ]
 
 
 def test_unpack_factorial10():
     assert unpack(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) == [0] * 10
 
 
-def test_choose_factorial2():
-    """
-    permute ABC
-
-    ABC
-    ACB
-    BAC
-    BCA
-    CAB
-    CBA
-    """
-    assert choose_by_unpacked(unpack(0, [1, 2, 3]), "abc") == ["a", "b", "c"]
-
-    assert choose_by_unpacked(unpack(1, [1, 2, 3]), "abc") == ["a", "c", "b"]
-    assert choose_by_unpacked(unpack(2, [1, 2, 3]), list(range(0, 3))) == [1, 0, 2]
+def test_pack_unpack():
+    assert unpack(pack([4, 2], [10, 10]), [10, 10]) == [4, 2]
 
 
-def test_choose_factorial10():
-    assert choose_by_unpacked(
-        unpack(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), list(range(0, 10))
-    ) == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    assert choose_by_unpacked(
-        unpack(1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), list(range(0, 10))
-    ) == [0, 1, 2, 3, 4, 5, 6, 7, 9, 8]
-    assert choose_by_unpacked(
-        unpack(2, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), list(range(0, 10))
-    ) == [0, 1, 2, 3, 4, 5, 6, 8, 7, 9]
+def test_solution():
+    assert nth_permutation(
+        list(range(10)), 999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+    ) == [2, 7, 8, 3, 9, 1, 5, 4, 6, 0]

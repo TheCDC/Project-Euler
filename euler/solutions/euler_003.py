@@ -1,4 +1,4 @@
-import utils
+from euler.solutions import utils
 from euler.solutions.utils import TimingContext
 
 NUM = 600851475143

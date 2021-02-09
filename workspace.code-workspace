@@ -1,20 +1,22 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"editor.formatOnSave": true,
-		"python.formatting.provider": "black"
-	},
-	"extensions": {
-		"recommendations": [
-			"ms-python.vscode-pylance"
-		]
-	},
-	"recommendations": [
-		"ms-python.vscode-pylance",
-		"donjayamanne.python-extension-pack"
-	]
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "black"
+  },
+  "extensions": {
+    "recommendations": ["ms-python.vscode-pylance"]
+  },
+  "recommendations": [
+    "ms-python.vscode-pylance",
+    "donjayamanne.python-extension-pack"
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": []
+  }
 }

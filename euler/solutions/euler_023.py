@@ -26,7 +26,8 @@ sum of two abundant numbers.
 What can be said about the sum of two adundant numbers?
 
 """
-import utils
+
+from euler.solutions import utils
 
 
 def is_abundant(n):
@@ -45,7 +46,7 @@ def problem():
 
     all_candidates = set(range(upper_bound + 1))
     for idxa, a in enumerate(abundants):
-        for b in abundants[idxa:len(abundants)]:
+        for b in abundants[idxa : len(abundants)]:
             if a + b > upper_bound:
                 break
             try:
@@ -61,5 +62,5 @@ def main():
     print(problem())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

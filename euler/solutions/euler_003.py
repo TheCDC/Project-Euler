@@ -1,4 +1,4 @@
-from euler.solutions.utils import TimingContext
+from euler.solutions import utils
 
 NUM = 600851475143
 
@@ -8,7 +8,7 @@ def solve():
 
 
 def main():
-    with TimingContext() as tc:
+    with utils.TimingContext() as tc:
         s = solve()
         print(s, tc.get_duration())
 

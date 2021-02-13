@@ -40,5 +40,8 @@ def nth_permutation(tokens: List, index: int, radixes: List[int]):
 
 
 if __name__ == "__main__":
-    print(unpack(999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
-    print(nth_permutation(list(range(10)), 999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
+    # print(unpack(999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
+    print(
+        *nth_permutation(list(range(10)), 999999, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]),
+        sep=""
+    )

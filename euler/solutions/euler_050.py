@@ -3,7 +3,7 @@ from euler.solutions.utils import isPrime
 
 """
 Project Euler Problem 50
-========================
+
 
 The prime 41, can be written as the sum of six consecutive primes:
 

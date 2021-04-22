@@ -1,6 +1,6 @@
 """
 Project Euler Problem 33
-========================
+
 
 The fraction 49/98 is a curious fraction, as an inexperienced
 mathematician in attempting to simplify it may incorrectly believe that

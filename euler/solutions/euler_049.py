@@ -1,6 +1,6 @@
 """
 Project Euler Problem 49
-========================
+
 
 The arithmetic sequence, 1487, 4817, 8147, in which each of the terms
 increases by 3330, is unusual in two ways: (i) each of the three terms are

@@ -1,6 +1,6 @@
 """
 Project Euler Problem 37
-========================
+
 
 The number 3797 has an interesting property. Being prime itself, it is
 possible to continuously remove digits from left to right, and remain
@@ -14,7 +14,7 @@ NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 
 
 
-===========
+
 What's the largest truncatable prime? How many digits long is it?
 Maybe I can generate them.
 """

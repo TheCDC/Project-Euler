@@ -1,6 +1,6 @@
 """
 Project Euler Problem 27
-========================
+
 
 Euler published the remarkable quadratic formula:
 

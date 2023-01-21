@@ -63,7 +63,9 @@ def generate_products():
             product = (get_product(n, i), n, i, iterations)
             valid = is_pandigital(product[0])
             if valid:
-                print(iterations, product)
+                print(
+                    f"candidate at step={iterations} pandigital={product[0]} {n=} {i=}"
+                )
                 largest_pandigital = (
                     max(largest_pandigital, product, key=lambda l: l[0])
                     if largest_pandigital

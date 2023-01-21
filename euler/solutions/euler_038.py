@@ -32,10 +32,6 @@ from typing import List
 PANDIGITAL_SET = set(range(1, 10))
 
 
-def generate_pandigitals():
-    yield from permutations(reversed(range(1, 10)))
-
-
 def is_pandigital(n: int):
     str_n = str(n)
     set_n = set([int(d) for d in str_n])
@@ -78,13 +74,10 @@ def generate_products():
 
 
 if __name__ == "__main__":
-    print(check_n_i(3, 192))
     assert check_n_i(3, 192)
     assert check_n_i(5, 9)
-    for p in zip(generate_pandigitals(), range(10)):
-        print(p)
-    with TimingContext(silent=False) as tc:
+    with TimingContext() as tc:
         iterations, largest = generate_products()
     print(
-        f"solution found after {iterations} iterations: {largest[0]} n={largest[1]} i={largest[1]}"
+        f"solution found after {tc.get_duration()} seconds and {iterations} cases checked: {largest[0]} n={largest[1]} i={largest[1]}"
     )

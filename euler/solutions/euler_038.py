@@ -36,61 +36,15 @@ def generate_pandigitals():
     yield from permutations(set(range(1, 10)))
 
 
-def is_match(x, n):
-    digits = set("".join(str(x * i) for i in range(1, n + 1)))
-    return len(digits) == 9
+def is_pandigital(n: int):
+    sn = str(n)
+    return len(sn) == 9 and len(set(sn)) == 9
 
 
-def x_satisfies(x):
-    return any(is_match(x, n) for n in range(2, 9 + 1))
-
-
-def generate_xs():
-    for ds in permutations(list(range(1, 10)), 4):
-        yield int("".join(map(str, ds)))
-
-
-def pandigital_satisfies(p) -> bool:
-    """is there an x that generates this pandigital with any n>1?"""
-    for n in range(2, 9 + 1):
-        parts = [p / z for z in range(1, n + 1)]
-        # parts must be all the same integers
-        if len(set(parts)) == 1:
-            return n
-    return 0
-
-
-def get_digit_groupings(pandigital: int, n: int) -> List[List[int]]:
-    if n == 1:
-        return [[pandigital]]
-    elif n == 9:
-        return [list(map(int, list(str(pandigital))))]
-
-
-def concat_digit_groups(digit_groups: List[int]) -> int:
-    return int("".join([str(n) for n in digit_groups]))
+def check_n_i(n: int, i: int):
+    return is_pandigital(int("".join(map(str, (i * nn for nn in range(1, n + 1))))))
 
 
 if __name__ == "__main__":
-    MAX = 999999999
-    for i in range(MAX):
-        if i % 1000000000 == 0:
-            print("PROGRESS", i, i / MAX)
-        for n in range(1, 10):
-            digit_groups = [i * subn for subn in range(1, n + 1)]
-            concatenated = concat_digit_groups(digit_groups)
-            if concatenated > MAX:
-                continue
-            digits = set(int(x) for x in str(concatenated))
-            if digits == PANDIGITAL_SET:
-                print(i, concatenated, n)
-    assert pandigital_satisfies(192384576) == True
-    assert pandigital_satisfies(918273645) == True
-    # m = 0
-    # for p in generate_pandigitals(9):
-    #     p = int("".join(map(str, p)))
-    #     s = pandigital_satisfies(p)
-    #     if s > 0:
-    #         m = max(m, p)
-    #         print(p, s)
-    # print(m)
+    assert check_n_i(3, 192)
+    assert check_n_i(5, 9)

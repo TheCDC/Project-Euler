@@ -60,7 +60,7 @@ def generate_products():
     iterations = 0
     for n, bounds_i_inclusive in n_to_bounds_i.items():
         for i in range(bounds_i_inclusive[0], bounds_i_inclusive[1] + 1):
-            product = (get_product(n, i), n, i)
+            product = (get_product(n, i), n, i, iterations)
             valid = is_pandigital(product[0])
             if valid:
                 print(iterations, product)
@@ -79,5 +79,5 @@ if __name__ == "__main__":
     with TimingContext() as tc:
         iterations, largest = generate_products()
     print(
-        f"solution found after {tc.get_duration()} seconds and {iterations} cases checked: {largest[0]} n={largest[1]} i={largest[1]}"
+        f"solution found after {tc.get_duration()} seconds and {iterations} cases checked: {largest[0]} n={largest[1]} i={largest[2]}. Answer found on iteration {largest[3]}."
     )

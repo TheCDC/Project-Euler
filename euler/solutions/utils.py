@@ -159,15 +159,16 @@ def reduce_fraction(f: Tuple[int, int]):
         final.update({base: min(n_facts[base], d_facts[base])})
     divisor = 1
     for base, exponent in final.items():
-        divisor *= base ** exponent
+        divisor *= base**exponent
     return (f[0] / divisor, f[1] / divisor)
 
 
 class TimingContext:
-    def __init__(self):
+    def __init__(self, silent=True):
         self.start_time = default_timer()
         self.end_time = self.start_time
         self.duration = 0
+        self.silent = silent
 
     def __enter__(self):
         self.start_time = default_timer()
@@ -176,6 +177,8 @@ class TimingContext:
     def __exit__(self, type, value, traceback):
         self.end_time = default_timer()
         self.duration = self.end_time - self.start_time
+        if not self.silent:
+            print(f"{self.duration:.2f}")
 
     def get_duration(self):
         return default_timer() - self.start_time

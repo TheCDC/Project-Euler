@@ -24,7 +24,7 @@ the concatenated product of an integer with (1,2, ... , n) where n > 1?
 
 
 """
-
+from euler.solutions.utils import TimingContext
 
 from itertools import combinations, permutations
 from typing import List
@@ -33,18 +33,58 @@ PANDIGITAL_SET = set(range(1, 10))
 
 
 def generate_pandigitals():
-    yield from permutations(set(range(1, 10)))
+    yield from permutations(reversed(range(1, 10)))
 
 
 def is_pandigital(n: int):
-    sn = str(n)
-    return len(sn) == 9 and len(set(sn)) == 9
+    str_n = str(n)
+    set_n = set([int(d) for d in str_n])
+    return len(str_n) == 9 and set_n == PANDIGITAL_SET
+
+
+def get_product(n: int, i: int):
+    return int("".join(map(str, (i * nn for nn in range(1, n + 1)))))
 
 
 def check_n_i(n: int, i: int):
-    return is_pandigital(int("".join(map(str, (i * nn for nn in range(1, n + 1))))))
+    product = get_product(n, i)
+    return is_pandigital(product)
+
+
+def generate_products():
+    n_to_bounds_i = {
+        2: (5000, 9999),
+        3: (100, 999),
+        4: (1, 32),
+        5: (1, 10),
+        6: (1, 3),
+        9: (1, 9),
+    }
+    largest_pandigital = None
+    iterations = 0
+    for n, bounds_i_inclusive in n_to_bounds_i.items():
+        for i in range(bounds_i_inclusive[0], bounds_i_inclusive[1] + 1):
+            product = (get_product(n, i), n, i)
+            valid = is_pandigital(product[0])
+            if valid:
+                print(iterations, product)
+                largest_pandigital = (
+                    max(largest_pandigital, product, key=lambda l: l[0])
+                    if largest_pandigital
+                    else product
+                )
+            iterations += 1
+    return (iterations, largest_pandigital)
 
 
 if __name__ == "__main__":
+    print(check_n_i(3, 192))
     assert check_n_i(3, 192)
     assert check_n_i(5, 9)
+    for p in zip(generate_pandigitals(), range(10)):
+        print(p)
+    with TimingContext(silent=False) as tc:
+        iterations, largest = generate_products()
+    print(
+        f"solution found after {iterations} iterations: {largest[0]} n={largest[1]} i={largest[1]}"
+    )

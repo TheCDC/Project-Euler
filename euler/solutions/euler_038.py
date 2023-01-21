@@ -79,5 +79,5 @@ if __name__ == "__main__":
     with TimingContext() as tc:
         iterations, largest = generate_products()
     print(
-        f"solution found after {tc.get_duration()} seconds and {iterations} cases checked: {largest[0]} n={largest[1]} i={largest[2]}. Answer found on iteration {largest[3]}."
+        f"solution found after {tc.get_duration():.2f} seconds and {iterations} cases checked: {largest[0]} n={largest[1]} i={largest[2]}. Answer found on iteration {largest[3]}."
     )

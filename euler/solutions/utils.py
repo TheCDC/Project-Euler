@@ -115,7 +115,6 @@ def digits(n, b):
 
 
 def numrepr(n, base):
-
     if base <= 10:
         d = ""
     else:

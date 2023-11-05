@@ -57,11 +57,11 @@ def champerowne_nth(n):
     return decode_index_digitlength(*t)
 
 
-def main():
-    for i in range(1, 1000):
-        print(i, get_digit_index_upper_bound(i), get_digit_length_from_index(i))
-    print([get_digit_length_from_index(i) for i in target_indices])
-    print([champerowne_nth(i) for i in range(100)])
+def tests():
+    # for i in range(1, 1000):
+    #     print(i, get_digit_index_upper_bound(i), get_digit_length_from_index(i))
+    # print([get_digit_length_from_index(i) for i in target_indices])
+    # print([champerowne_nth(i) for i in range(100)])
     assert len(target_indices) == 7
     for i in range(1, 10):
         assert champerowne_nth(i) == i, f"{i}, {champerowne_nth(i)}"
@@ -72,9 +72,14 @@ def main():
     assert champerowne_nth(16) == 1
     assert champerowne_nth(17) == 3
     assert champerowne_nth(18) == 1
+
+
+def main():
+    tests()
     solution_digits = [champerowne_nth(i) for i in target_indices]
 
-    print(numprod(solution_digits), solution_digits)
+    print(solution_digits)
+    print(numprod(solution_digits))
 
 
 if __name__ == "__main__":

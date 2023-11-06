@@ -13,7 +13,10 @@ def num_different_digits(a, b):
 
 def digit_length(n):
     return len(str(n))
-def solve_with_limit(limit_upper):
+
+
+def solve_with_limit(limit_upper, family_size_target=8):
+    targets = []
     ps = list(prime_sieve(limit_upper))
     family_biggest = set()
     for p in ps:
@@ -41,6 +44,8 @@ def solve_with_limit(limit_upper):
                 ):
                     family.add(neighbor_potential)
                     # print(p, neighbor_potential, digit, list(map(int, binary_mask)))
+            if len(family) == family_size_target:
+                return family
             if len(family) > len(family_biggest):
                 family_biggest = family
                 print(list(sorted(family_biggest)))
@@ -48,7 +53,17 @@ def solve_with_limit(limit_upper):
     print(len(sfb), sfb, list(isPrime(p) for p in sfb))
     return sfb
 
+
 def main():
+    limit = 10000
+    s = []
+    while len(s) < 8:
+        if len(s) > 0:
+            print("Upper limit too low, found a family of only size", len(s))
+        limit *= 2
+        print("Solving with limit of", limit)
+        s = solve_with_limit(limit)
+    print(list(sorted(s)))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from .utils import prime_sieve, isPrime
 from itertools import groupby, product
+import sys
 
 DIGITS = tuple(range(0, 10))
 LIMIT_UPPER = 100000
@@ -16,7 +17,6 @@ def digit_length(n):
 
 
 def solve_with_limit(limit_upper, family_size_target=8):
-    targets = []
     ps = list(prime_sieve(limit_upper))
     family_biggest = set()
     for p in ps:
@@ -43,14 +43,13 @@ def solve_with_limit(limit_upper, family_size_target=8):
                     and digit_length(neighbor_potential) == dl
                 ):
                     family.add(neighbor_potential)
-                    # print(p, neighbor_potential, digit, list(map(int, binary_mask)))
             if len(family) == family_size_target:
                 return family
             if len(family) > len(family_biggest):
                 family_biggest = family
-                print(list(sorted(family_biggest)))
+                print(list(sorted(family_biggest)), file=sys.stderr)
     sfb = list(sorted(family_biggest))
-    print(len(sfb), sfb, list(isPrime(p) for p in sfb))
+    print(len(sfb), sfb, list(isPrime(p) for p in sfb), file=sys.stderr)
     return sfb
 
 
@@ -59,11 +58,16 @@ def main():
     s = []
     while len(s) < 8:
         if len(s) > 0:
-            print("Upper limit too low, found a family of only size", len(s))
+            print(
+                "Upper limit too low, found a family of only size",
+                len(s),
+                file=sys.stderr,
+            )
         limit *= 2
-        print("Solving with limit of", limit)
+        print("Solving with limit of", limit, file=sys.stderr)
         s = solve_with_limit(limit)
-    print(list(sorted(s)))
+    print(list(sorted(s)), file=sys.stderr)
+    print(min(s))
 
 
 if __name__ == "__main__":

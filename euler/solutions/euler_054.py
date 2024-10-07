@@ -148,6 +148,19 @@ def four_of_a_kind(hand: list[str]):
     return 4 in vs
 
 
+def stright_flush(hand: list[str]):
+    cards = [str_to_card(s) for s in hand]
+    counts_suits = Counter(c[1] for c in cards)
+    return (
+        len(counts_suits.keys()) == 1 and 5 in counts_suits.values() and straight(hand)
+    )
+
+
+def royal_flush(hand: list[str]):
+    values = [str_to_card(s)[0] for s in hand]
+    return flush(hand) and set(values) == set(VALUES[-5:])
+
+
 funcs: list[callable] = [
     one_pair,
     two_pair,
@@ -155,6 +168,8 @@ funcs: list[callable] = [
     flush,
     straight,
     four_of_a_kind,
+    stright_flush,
+    royal_flush,
 ]
 
 
@@ -170,6 +185,9 @@ def solve():
                     c.update([f.__name__])
                 if b:
                     c.update([f.__name__])
+            # for h in hands:
+            #     if all(s in "".join(h) for s in ["T", "J", "Q", "K", "A"]):
+            #         print(l)
     print(c.total())
     print(c.most_common())
 

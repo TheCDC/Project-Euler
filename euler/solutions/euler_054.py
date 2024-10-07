@@ -91,16 +91,20 @@ def one_pair(hand: list[str]):
     for card in cards:
         indices.update({card[0]: indices.get(card[0], []) + [card]})
     xs = [list(combinations(v, r=2)) for v in indices.values() if len(v) >= 2]
-    if xs:
-        print(xs)
+    # if xs:
+    #     print(xs)
+    # print(xs)
     # for k, v in indices.items():
     #     cs = list(combinations(v, r=2))
     #     if cs:
     #         print(["".join(t) for c in cs for t in c])
+    return xs
     return any(len(l) >= 2 for l in indices.values())
 
 
 def two_pair(hand: list[str]):
+    """At least one value in the hand appears twice"""
+
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
     count_counts = Counter(count_values.values())
@@ -108,7 +112,7 @@ def two_pair(hand: list[str]):
 
 
 def three_of_a_kind(hand: list[str]):
-    """At least one value in the hand is repeated."""
+    """At least one value in the hand appears three times"""
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
     return 3 in count_values.values()
@@ -124,17 +128,50 @@ def straight(hand: list[str]):
 
 
 def flush(hand: list[str]):
+    """All cards in the hand are te same suit."""
     suits = [str_to_card(s)[1] for s in hand]
+    n = len(set(suits))
+    return n == 1
 
 
-funcs: list[callable] = [one_pair, two_pair]
+def full_house(hand: list[str]):
+    values = [str_to_card(s)[0] for s in hand]
+    count_values = Counter(values)
+    vs = count_values.values()
+    return 2 in vs and 3 in vs
+
+
+def four_of_a_kind(hand: list[str]):
+    values = [str_to_card(s)[0] for s in hand]
+    count_values = Counter(values)
+    vs = count_values.values()
+    return 4 in vs
+
+
+funcs: list[callable] = [
+    one_pair,
+    two_pair,
+    full_house,
+    flush,
+    straight,
+    four_of_a_kind,
+]
 
 
 def solve():
+    c = Counter()
     with open(HANDS_FILE) as f:
         for l in f:
             hands = line(l)
-            print(hands, one_pair(hands[0]), one_pair(hands[1]))
+            for f in funcs:
+                a = f(hands[0])
+                b = f(hands[1])
+                if a:
+                    c.update([f.__name__])
+                if b:
+                    c.update([f.__name__])
+    print(c.total())
+    print(c.most_common())
 
 
 def main():

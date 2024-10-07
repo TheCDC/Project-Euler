@@ -1,10 +1,8 @@
 """
 Project Euler Problem 54
 ========================
-
 In the card game poker, a hand consists of five cards and are ranked, from
 lowest to highest, in the following way:
-
   * High Card: Highest value card.
   * One Pair: Two cards of the same value.
   * Two Pairs: Two different pairs.
@@ -15,19 +13,15 @@ lowest to highest, in the following way:
   * Four of a Kind: Four cards of the same value.
   * Straight Flush: All cards are consecutive values of same suit.
   * Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
-
 The cards are valued in the order:
 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace.
-
 If two players have the same ranked hands then the rank made up of the
 highest value wins; for example, a pair of eights beats a pair of fives
 (see example 1 below). But if two ranks tie, for example, both players
 have a pair of queens, then highest cards in each hand are compared (see
 example 4 below); if the highest cards tie then the next highest cards are
 compared, and so on.
-
 Consider the following five hands dealt to two players:
-
         Hand   Player 1            Player 2              Winner
         1      5H 5C 6S 7S KD      2C 3S 8S 8D TD        Player 2
                Pair of Fives       Pair of Eights
@@ -41,25 +35,25 @@ Consider the following five hands dealt to two players:
                2H 2D 4C 4D 4S      3C 3D 3S 9S 9D
         5      Full House          Full House            Player 1
                With Three Fours    with Three Threes
-
 The file poker.txt contains one-thousand random hands dealt to two players.
 Each line of the file contains ten cards (separated by a single space): the
 first five are Player 1's cards and the last five are Player 2's cards. You
 can assume that all hands are valid (no invalid characters or repeated
 cards), each player's hand is in no specific order, and in each hand there
 is a clear winner.
-
 How many hands does Player 1 win?
 """
 
-from euler.solutions.utils import TimingContext
-from pathlib import Path
 from collections import Counter
-from itertools import product, combinations
+from euler.solutions.utils import TimingContext
+from itertools import combinations
+from pathlib import Path
+from typing import Callable
 
 SUITS = frozenset(["C", "D", "H", "S"])
 VALUES = ("2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A")
 HANDS_FILE = Path(__file__).parent / "resources" / "poker.txt"
+HANDS_FILE_TEST = Path(__file__).parent / "resources" / "poker-test.txt"
 
 
 def is_card(s: str) -> bool:
@@ -84,22 +78,16 @@ def line(s: str) -> tuple[list[str]]:
 
 
 def one_pair(hand: list[str]):
-    """All pairs of two cards that have the same value"""
+    """The highest valued pair, if any"""
 
     cards = [str_to_card(s) for s in hand]
     indices = dict()
     for card in cards:
         indices.update({card[0]: indices.get(card[0], []) + [card]})
-    xs = [list(combinations(v, r=2)) for v in indices.values() if len(v) >= 2]
-    # if xs:
-    #     print(xs)
-    # print(xs)
-    # for k, v in indices.items():
-    #     cs = list(combinations(v, r=2))
-    #     if cs:
-    #         print(["".join(t) for c in cs for t in c])
-    return xs
-    return any(len(l) >= 2 for l in indices.values())
+    matches = [k for k, v in indices.items() if len(v) == 2]
+    if not matches:
+        return 0
+    return max(VALUES.index(s) for s in matches) + 1
 
 
 def two_pair(hand: list[str]):
@@ -119,9 +107,9 @@ def three_of_a_kind(hand: list[str]):
 
 
 def straight(hand: list[str]):
-    values = [str_to_card(s)[0] for s in hand]
+    cards = [str_to_card(s) for s in hand]
     # values.sort(key=lambda v: VALUES.index(v))
-    indices = sorted([VALUES.index(v) for v in values])
+    indices = sorted(card_value_tuple(c) for c in cards)
     diffs = [b - a for a, b in zip(indices, indices[1:])]
     return all(d == 1 for d in diffs)
     # print(hand, indices, diffs)
@@ -137,8 +125,8 @@ def flush(hand: list[str]):
 def full_house(hand: list[str]):
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
-    vs = count_values.values()
-    return 2 in vs and 3 in vs
+    vs = set(count_values.values())
+    return vs == set([2, 3])
 
 
 def four_of_a_kind(hand: list[str]):
@@ -148,7 +136,7 @@ def four_of_a_kind(hand: list[str]):
     return 4 in vs
 
 
-def stright_flush(hand: list[str]):
+def straight_flush(hand: list[str]):
     cards = [str_to_card(s) for s in hand]
     counts_suits = Counter(c[1] for c in cards)
     return (
@@ -161,40 +149,81 @@ def royal_flush(hand: list[str]):
     return flush(hand) and set(values) == set(VALUES[-5:])
 
 
-funcs: list[callable] = [
+def high_card(hand: list[str]):
+    values = [str_to_card(s)[0] for s in hand]
+    return sorted(values, key=lambda x: VALUES.index(x))
+
+
+funcs_rank: list[Callable] = [
     one_pair,
     two_pair,
-    full_house,
-    flush,
+    three_of_a_kind,
     straight,
+    flush,
+    full_house,
     four_of_a_kind,
-    stright_flush,
+    straight_flush,
     royal_flush,
 ]
 
 
-def solve():
+def rank_hand(hand: list[str]):
+    for index, f in enumerate(funcs_rank):
+        if f(hand):
+            yield index
+
+
+def winner(hand_a: list[str], hand_b: list[str]) -> int:
+    ranks_hand_a = list(rank_hand(hand_a))
+    ranks_hand_b = list(rank_hand(hand_b))
+    nranks_a = len(ranks_hand_a)
+    nranks_b = len(ranks_hand_b)
+    print(ranks_hand_a, ranks_hand_b)
+    # high card
+    if nranks_a > 0 and nranks_b > 0:
+        if max(ranks_hand_a) > max(ranks_hand_b):
+            return 0
+        elif max(ranks_hand_a) < max(ranks_hand_b):
+            return 1
+        elif max(ranks_hand_a) == max(ranks_hand_b):
+            pass
+    high_cards = (high_card(hand_a), high_card(hand_b))
+    highest_cards = [(a, b) for a, b in reversed(list(zip(*high_cards))) if a != b]
+
+    winner_high_card = max(
+        enumerate(highest_cards[0]), key=lambda t: VALUES.index(t[1])
+    )
+    return winner_high_card[0]
+    return -1
+
+
+def solve(filepath: Path, debug=False):
     c = Counter()
-    with open(HANDS_FILE) as f:
+    count_winners = Counter()
+    with open(filepath) as f:
         for l in f:
             hands = line(l)
-            for f in funcs:
-                a = f(hands[0])
-                b = f(hands[1])
-                if a:
-                    c.update([f.__name__])
-                if b:
-                    c.update([f.__name__])
+            # for f in reversed(funcs_rank):
+            #     a = f(hands[0])
+            #     b = f(hands[1])
+            #     if a:
+            #         c.update([f.__name__])
+            #     if b:
+            #         c.update([f.__name__])
+            count_winners.update([winner(hands[0], hands[1])])
             # for h in hands:
             #     if all(s in "".join(h) for s in ["T", "J", "Q", "K", "A"]):
             #         print(l)
-    print(c.total())
-    print(c.most_common())
+    return count_winners
 
 
 def main():
+    # with TimingContext() as tc:
+    #     s = solve(HANDS_FILE)
+    #     print(s, tc.get_duration())
+
     with TimingContext() as tc:
-        s = solve()
+        s = solve(HANDS_FILE_TEST)
         print(s, tc.get_duration())
 
 

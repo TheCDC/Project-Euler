@@ -198,14 +198,15 @@ def rank_hand(hand: list[str]):
 def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
     ranks_hand_a = list(rank_hand(hand_a))
     ranks_hand_b = list(rank_hand(hand_b))
-
     # high card
     # maxranks = (max(t[1] for t in ranks_hand_a), max(t[1] for t in ranks_hand_b))
     winner_rank = None
     if ranks_hand_a and ranks_hand_b:
-        if max(t[0] for t in ranks_hand_a) > max(t[0] for t in ranks_hand_b):
+        rank_index_max_a = max(rank_index for rank_index, _ in ranks_hand_a)
+        rank_index_max_b = max(rank_index for rank_index, _ in ranks_hand_b)
+        if rank_index_max_a > rank_index_max_b:
             winner_rank = 0
-        elif max(t[0] for t in ranks_hand_a) < max(t[0] for t in ranks_hand_b):
+        elif rank_index_max_a < rank_index_max_b:
             winner_rank = 1
     elif ranks_hand_a:
         winner_rank = 0

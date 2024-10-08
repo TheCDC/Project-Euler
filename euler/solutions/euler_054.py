@@ -77,7 +77,7 @@ def line(s: str) -> tuple[list[str]]:
     return (sl[:5], sl[5:])
 
 
-def one_pair(hand: list[str]):
+def one_pair(hand: list[str]) -> int:
     """The highest valued pair, if any"""
 
     cards = [str_to_card(s) for s in hand]
@@ -90,68 +90,87 @@ def one_pair(hand: list[str]):
     return max(VALUES.index(s) for s in matches) + 1
 
 
-def two_pair(hand: list[str]):
+def two_pair(hand: list[str]) -> int:
     """At least one value in the hand appears twice"""
 
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
     count_counts = Counter(count_values.values())
-    return 2 in count_counts and count_counts[2] >= 2
+    if not (2 in count_counts and count_counts[2] >= 2):
+        return 0
+    return max(VALUES.index(k) for k, v in count_values.items() if v >= 2) + 1
 
 
-def three_of_a_kind(hand: list[str]):
+def three_of_a_kind(hand: list[str]) -> int:
     """At least one value in the hand appears three times"""
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
-    return 3 in count_values.values()
+    if not 3 in count_values.values():
+        return 0
+    return max(VALUES.index(k) for k, v in count_values.items() if v == 3) + 1
 
 
-def straight(hand: list[str]):
+def straight(hand: list[str]) -> int:
     cards = [str_to_card(s) for s in hand]
     # values.sort(key=lambda v: VALUES.index(v))
     indices = sorted(card_value_tuple(c) for c in cards)
     diffs = [b - a for a, b in zip(indices, indices[1:])]
-    return all(d == 1 for d in diffs)
+    if not all(d == 1 for d in diffs):
+        return 0
+    return max(VALUES.index(c[0]) for c in cards) + 1
     # print(hand, indices, diffs)
 
 
-def flush(hand: list[str]):
-    """All cards in the hand are te same suit."""
-    suits = [str_to_card(s)[1] for s in hand]
+def flush(hand: list[str]) -> int:
+    """All cards in the hand are the same suit."""
+    cards = [str_to_card(s) for s in hand]
+    suits = [card[1] for card in cards]
     n = len(set(suits))
-    return n == 1
+    if not n == 1:
+        return 0
+    return max(VALUES.index(c[0]) for c in cards) + 1
 
 
-def full_house(hand: list[str]):
+def full_house(hand: list[str]) -> int:
+    cards = [str_to_card(s) for s in hand]
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
-    vs = set(count_values.values())
-    return vs == set([2, 3])
+    counts_distinct = set(count_values.values())
+    if not counts_distinct == set([2, 3]):
+        return 0
+    return max(VALUES.index(c[0]) for c in cards) + 1
 
 
-def four_of_a_kind(hand: list[str]):
+def four_of_a_kind(hand: list[str]) -> int:
     values = [str_to_card(s)[0] for s in hand]
     count_values = Counter(values)
     vs = count_values.values()
-    return 4 in vs
+    if not 4 in vs:
+        return 0
+    return max(VALUES.index(k) for k, v in count_values.items() if v == 4) + 1
 
 
-def straight_flush(hand: list[str]):
+def straight_flush(hand: list[str]) -> int:
     cards = [str_to_card(s) for s in hand]
     counts_suits = Counter(c[1] for c in cards)
-    return (
+    if not (
         len(counts_suits.keys()) == 1 and 5 in counts_suits.values() and straight(hand)
-    )
+    ):
+        return 0
+    return max(VALUES.index(c[0]) for c in cards)
 
 
-def royal_flush(hand: list[str]):
+def royal_flush(hand: list[str]) -> int:
     values = [str_to_card(s)[0] for s in hand]
-    return flush(hand) and set(values) == set(VALUES[-5:])
+    if not (flush(hand) and set(values) == set(VALUES[-5:])):
+        return 0
+    return max(VALUES.index(v) for v in values) + 1
 
 
-def high_card(hand: list[str]):
+def high_card(hand: list[str]) -> int:
     values = [str_to_card(s)[0] for s in hand]
-    return sorted(values, key=lambda x: VALUES.index(x))
+    # return sorted(values, key=lambda x: VALUES.index(x))
+    return max(VALUES.index(v) for v in values) + 1
 
 
 funcs_rank: list[Callable] = [
@@ -169,8 +188,9 @@ funcs_rank: list[Callable] = [
 
 def rank_hand(hand: list[str]):
     for index, f in enumerate(funcs_rank):
-        if f(hand):
-            yield index
+        rank_value = f(hand)
+        if rank_value:
+            yield index, rank_value
 
 
 def winner(hand_a: list[str], hand_b: list[str]) -> int:
@@ -178,23 +198,28 @@ def winner(hand_a: list[str], hand_b: list[str]) -> int:
     ranks_hand_b = list(rank_hand(hand_b))
     nranks_a = len(ranks_hand_a)
     nranks_b = len(ranks_hand_b)
-    print(ranks_hand_a, ranks_hand_b)
+    print(
+        "ranks",
+        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
+        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
+    )
+
     # high card
+    # maxranks = (max(t[1] for t in ranks_hand_a), max(t[1] for t in ranks_hand_b))
     if nranks_a > 0 and nranks_b > 0:
-        if max(ranks_hand_a) > max(ranks_hand_b):
+        if max(t[1] for t in ranks_hand_a) > max(t[1] for t in ranks_hand_b):
             return 0
         elif max(ranks_hand_a) < max(ranks_hand_b):
             return 1
-        elif max(ranks_hand_a) == max(ranks_hand_b):
-            pass
-    high_cards = (high_card(hand_a), high_card(hand_b))
-    highest_cards = [(a, b) for a, b in reversed(list(zip(*high_cards))) if a != b]
+    highest_cards = (high_card(hand_a), high_card(hand_b))
+    # highest_cards = [(a, b) for a, b in reversed(list(zip(*high_cards))) if a != b]
 
-    winner_high_card = max(
-        enumerate(highest_cards[0]), key=lambda t: VALUES.index(t[1])
-    )
+    # winner_high_card = max(
+    #     enumerate(highest_cards[0]), key=lambda t: VALUES.index(t[1])
+    # )
+    winner_high_card = max(enumerate(highest_cards), key=lambda t: (t[1]))
+
     return winner_high_card[0]
-    return -1
 
 
 def solve(filepath: Path, debug=False):

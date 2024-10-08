@@ -54,6 +54,7 @@ SUITS = frozenset(["C", "D", "H", "S"])
 VALUES = ("2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A")
 HANDS_FILE = Path(__file__).parent / "resources" / "poker.txt"
 HANDS_FILE_TEST = Path(__file__).parent / "resources" / "poker-test.txt"
+HANDS_FILE_TEST_2 = Path(__file__).parent / "resources" / "poker-test2.txt"
 
 
 def is_card(s: str) -> bool:
@@ -138,7 +139,8 @@ def full_house(hand: list[str]) -> int:
     counts_distinct = set(count_values.values())
     if not counts_distinct == set([2, 3]):
         return 0
-    return max(VALUES.index(c[0]) for c in cards) + 1
+    return [VALUES.index(k) for k, v in count_values.items() if v == 3][0] + 1
+    # return max(VALUES.index(c[0]) for c in cards) + 1
 
 
 def four_of_a_kind(hand: list[str]) -> int:
@@ -193,40 +195,75 @@ def rank_hand(hand: list[str]):
             yield index, rank_value
 
 
-def winner(hand_a: list[str], hand_b: list[str]) -> int:
+def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
     ranks_hand_a = list(rank_hand(hand_a))
     ranks_hand_b = list(rank_hand(hand_b))
-    nranks_a = len(ranks_hand_a)
-    nranks_b = len(ranks_hand_b)
-    print(
-        "ranks",
-        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
-        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
-    )
 
     # high card
     # maxranks = (max(t[1] for t in ranks_hand_a), max(t[1] for t in ranks_hand_b))
-    if nranks_a > 0 and nranks_b > 0:
-        if max(t[1] for t in ranks_hand_a) > max(t[1] for t in ranks_hand_b):
-            return 0
-        elif max(ranks_hand_a) < max(ranks_hand_b):
-            return 1
+    winner_rank = None
+    if ranks_hand_a and ranks_hand_b:
+        if max(t[0] for t in ranks_hand_a) > max(t[0] for t in ranks_hand_b):
+            winner_rank = 0
+        elif max(t[0] for t in ranks_hand_a) < max(t[0] for t in ranks_hand_b):
+            winner_rank = 1
+    elif ranks_hand_a:
+        winner_rank = 0
+    elif ranks_hand_b:
+        winner_rank = 1
     highest_cards = (high_card(hand_a), high_card(hand_b))
-    # highest_cards = [(a, b) for a, b in reversed(list(zip(*high_cards))) if a != b]
+    highest_cards_pairs = [
+        (a, b)
+        for a, b in reversed(
+            list(
+                zip(
+                    sorted([card_value_str(s) for s in hand_a]),
+                    sorted([card_value_str(s) for s in hand_b]),
+                )
+            )
+        )
+        if a != b
+    ]
 
     # winner_high_card = max(
     #     enumerate(highest_cards[0]), key=lambda t: VALUES.index(t[1])
     # )
-    winner_high_card = max(enumerate(highest_cards), key=lambda t: (t[1]))
-
-    return winner_high_card[0]
+    # winner_high_card = max(enumerate(highest_cards), key=lambda t: (t[1]))
+    high_card_winner_pair = highest_cards_pairs[0]
+    if high_card_winner_pair[0] == high_card_winner_pair[1]:
+        raise Exception
+    winner_high_card = None
+    if high_card_winner_pair[0] > high_card_winner_pair[1]:
+        winner_high_card = 0
+    if high_card_winner_pair[0] < high_card_winner_pair[1]:
+        winner_high_card = 1
+    print(
+        index if index else "",
+        hand_a,
+        hand_b,
+        winner_rank if winner_rank else "x",
+        winner_high_card,
+        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
+        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
+        VALUES[high_card(hand_a) - 1],
+        VALUES[high_card(hand_b) - 1],
+    )
+    if winner_rank:
+        return winner_rank
+    # if len(set(highest_cards)) == 1:
+    #     print(highest_cards_pairs)
+    #     raise Exception(set(VALUES[(c - 1)] for c in highest_cards))
+    return winner_high_card
+    # 217 wrong
+    # 201 wrong
+    # 219 wrong
 
 
 def solve(filepath: Path, debug=False):
     c = Counter()
     count_winners = Counter()
     with open(filepath) as f:
-        for l in f:
+        for index, l in enumerate(f):
             hands = line(l)
             # for f in reversed(funcs_rank):
             #     a = f(hands[0])
@@ -235,22 +272,32 @@ def solve(filepath: Path, debug=False):
             #         c.update([f.__name__])
             #     if b:
             #         c.update([f.__name__])
-            count_winners.update([winner(hands[0], hands[1])])
+            if index == 998:
+                pass
+            count_winners.update([winner(hands[0], hands[1], index=index)])
             # for h in hands:
             #     if all(s in "".join(h) for s in ["T", "J", "Q", "K", "A"]):
             #         print(l)
-    return count_winners
+    print(count_winners)
+    return count_winners[0]
 
 
 def main():
-    # with TimingContext() as tc:
-    #     s = solve(HANDS_FILE)
-    #     print(s, tc.get_duration())
 
     with TimingContext() as tc:
+        s = solve(HANDS_FILE)
+        print(s, tc.get_duration())
+    with TimingContext() as tc:
         s = solve(HANDS_FILE_TEST)
+        print(s, tc.get_duration())
+    with TimingContext() as tc:
+        s = solve(HANDS_FILE_TEST_2)
         print(s, tc.get_duration())
 
 
 if __name__ == "__main__":
     main()
+
+"""
+ranks ['AD', '7D', 'JH', '6C', '7H'] ['4H', '3S', '3H', '4D', 'QH'] 0 0 [('one_pair', '7')] [('one_pair', '4'), ('two_pair', '4')] A Q
+"""

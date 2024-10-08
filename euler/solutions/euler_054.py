@@ -202,17 +202,28 @@ def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
     # maxranks = (max(t[1] for t in ranks_hand_a), max(t[1] for t in ranks_hand_b))
     winner_rank = None
     if ranks_hand_a and ranks_hand_b:
-        rank_index_max_a = max(rank_index for rank_index, _ in ranks_hand_a)
-        rank_index_max_b = max(rank_index for rank_index, _ in ranks_hand_b)
-        if rank_index_max_a > rank_index_max_b:
+        rank_index_max_a = max(
+            (rank_index, value) for rank_index, value in ranks_hand_a
+        )
+        rank_index_max_b = max(
+            (rank_index, value) for rank_index, value in ranks_hand_b
+        )
+        if rank_index_max_a[0] > rank_index_max_b[0]:
             winner_rank = 0
-        elif rank_index_max_a < rank_index_max_b:
+        elif rank_index_max_a[0] < rank_index_max_b[0]:
             winner_rank = 1
+        elif rank_index_max_a[0] == rank_index_max_b[0]:
+            if rank_index_max_a[1] > rank_index_max_b[1]:
+                winner_rank = 0
+            elif rank_index_max_a[1] < rank_index_max_b[1]:
+                winner_rank = 1
+            elif rank_index_max_a[1] == rank_index_max_b[1]:
+                pass
+
     elif ranks_hand_a:
         winner_rank = 0
     elif ranks_hand_b:
         winner_rank = 1
-    highest_cards = (high_card(hand_a), high_card(hand_b))
     highest_cards_pairs = [
         (a, b)
         for a, b in reversed(
@@ -226,10 +237,6 @@ def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
         if a != b
     ]
 
-    # winner_high_card = max(
-    #     enumerate(highest_cards[0]), key=lambda t: VALUES.index(t[1])
-    # )
-    # winner_high_card = max(enumerate(highest_cards), key=lambda t: (t[1]))
     high_card_winner_pair = highest_cards_pairs[0]
     if high_card_winner_pair[0] == high_card_winner_pair[1]:
         raise Exception
@@ -239,10 +246,10 @@ def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
     if high_card_winner_pair[0] < high_card_winner_pair[1]:
         winner_high_card = 1
     print(
-        index if index else "",
+        index if index is not None else "",
         hand_a,
         hand_b,
-        winner_rank if winner_rank else "x",
+        winner_rank if winner_rank is not None else "x",
         winner_high_card,
         [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
         [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
@@ -301,4 +308,5 @@ if __name__ == "__main__":
 
 """
 ranks ['AD', '7D', 'JH', '6C', '7H'] ['4H', '3S', '3H', '4D', 'QH'] 0 0 [('one_pair', '7')] [('one_pair', '4'), ('two_pair', '4')] A Q
+139 ['9D', 'TD', '9H', 'QC', '5D'] ['6C', '8H', '8C', 'KC', 'TS'] x 1 [('one_pair', '9')] [('one_pair', '8')] Q K
 """

@@ -115,10 +115,19 @@ def ones():
         yield str(n).count("1")
 
 
+def ones_in_place():
+    for n in count(1):
+        yield "".join(c if c == "1" else " " for c in reversed(str(n)))
+
+
 def generate_ones(n):
     p = directory_temp() / "233_ones.txt"
     with open(p, "w") as f:
         for i in islice(ones(), n):
+            f.write(f"{i}\n")
+    p = directory_temp() / "233_ones_in_place.txt"
+    with open(p, "w") as f:
+        for i in islice(ones_in_place(), n):
             f.write(f"{i}\n")
 
 

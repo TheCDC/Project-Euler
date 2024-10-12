@@ -84,62 +84,6 @@ def guess_2(n: int) -> int:
     return sum_guesses
 
 
-def count_previous_runs_place(n: int, exponent: int) -> int:
-    """
-    The 10**0 place has runs of length 10**0 every 10**1 starting at 0
-    The 10**1 place has runs of length 10**1 every 10**2 starting at 10**1
-    The 10**2 place has runs of length 10**2 every 10**3 starting at 10**2
-
-
-    Put another way
-
-    Every 10**1 contributes a run of length 1 in the 10**0 place
-    A RUN is a sequence of consecutive values of n each of which the digit in the
-    EXPONENT place is 1
-    A chunk has one run
-    """
-    # if n <= 10**exponent:
-    #     raise ValueError(f"This function is only valid for n>=10**(exponent+1)")
-    if exponent == 0:
-        return n // 10
-    run_length = 10**exponent
-    chunk_length = 10 ** (exponent + 1)
-    num_chunks = (n) // chunk_length
-    count_ones_previous_runs = num_chunks * run_length
-    return count_ones_previous_runs
-
-
-def guess_3(n) -> int:
-    """Counts the ones in ony previous ones"""
-    digits = list(reversed(str(n)))
-    place_counts = [
-        count_previous_runs_place(n, exponent) for exponent, _ in enumerate(digits)
-    ]
-    sum_place_counts = sum(place_counts)
-    return sum_place_counts
-
-
-def count_current_run(n: int, exponent: int) -> int:
-    # TODO 2024-10-11 How can you know where you are in a run for a given digit place?
-    # the 10**0 place goes [1,2), [11,12), ...
-    # the 10**1 place goes [10,20), [110,120), ...
-    # the 10**2 place goes [100,200), [1100,1200), ...
-
-    # MODULAR ARITHMETIC will be key in this step.
-    """
-    for exp=e
-    look for
-    """
-
-    pass
-
-
-def guess_4(n):
-    """Add the ones in the current run to the lower bound set by guess_3"""
-    # TODO 2024-10-11
-    pass
-
-
 def countDigitOne(n: int) -> int:
     # Use lru_cache decorator to memoize the results of the recursive calls
     @cache
@@ -176,9 +120,76 @@ def countDigitOne(n: int) -> int:
     return dfs(len(digits) - 1, 0, True)
 
 
+def count_previous_runs_place(n: int, exponent: int) -> int:
+    """
+    The 10**0 place has runs of length 10**0 every 10**1 starting at 0
+    The 10**1 place has runs of length 10**1 every 10**2 starting at 10**1
+    The 10**2 place has runs of length 10**2 every 10**3 starting at 10**2
+
+
+    Put another way
+
+    Every 10**1 contributes a run of length 1 in the 10**0 place
+    A RUN is a sequence of consecutive values of n each of which the digit in the
+    EXPONENT place is 1
+    A chunk has one run
+    """
+    # if n <= 10**exponent:
+    #     raise ValueError(f"This function is only valid for n>=10**(exponent+1)")
+    if exponent == 0:
+        return n // 10
+    run_length = 10**exponent
+    chunk_length = 10 ** (exponent + 1)
+    num_chunks = (n) // chunk_length
+    count_ones_previous_runs = num_chunks * run_length
+    return count_ones_previous_runs
+
+
+def guess_3(n) -> int:
+    """Counts the ones in ony previous ones"""
+    digits = list(reversed(str(n)))
+    place_counts = [
+        count_previous_runs_place(n, exponent) for exponent, _ in enumerate(digits)
+    ]
+    sum_place_counts = sum(place_counts)
+    return sum_place_counts
+
+
+def count_current_chunk(n: int, exponent: int) -> int:
+    # How can you know where you are in a run for a given digit place?
+    # the 10**0 place goes [1,2), [11,12), ...
+    # the 10**1 place goes [10,20), [110,120), ...
+    # the 10**2 place goes [100,200), [1100,1200), ...
+
+    # MODULAR ARITHMETIC will be key in this step.
+    digit = (n // 10**exponent) % 10
+    if exponent == 0:
+        if digit == 0:
+            return 0
+        return 1
+    if digit == 0:
+        return 0
+    if digit > 1:
+        return 10**exponent
+    # partal run, digit==1
+    run_start = 10**exponent
+    chunk_length = 10 ** (exponent + 1)
+    chunk_index = n % chunk_length
+    return chunk_index - run_start + 1
+
+
+def guess_4(n):
+    """Add the ones in the current run to the lower bound set by guess_3"""
+    # TODO 2024-10-11
+    guess_lower = guess_3(n)
+    places = [count_current_chunk(n, exponent) for exponent, _ in enumerate(str(n))]
+    print(places, sum(places), guess_lower, guess_lower + sum(places))
+    return sum(places) + guess_lower
+
+
 class Solution:
     def countDigitOne(self, n: int) -> int:
-        pass
+        return guess_4(n)
 
 
 def generate_tables():

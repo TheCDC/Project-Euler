@@ -37,7 +37,7 @@ def naive():
         yield s
 
 
-def upper_bound(n):
+def upper_bound(n: int) -> int:
     """
     Equivalent to `sum(len(str(n)) for n in range(1,1+n))`
     Assume all digits are 1
@@ -65,7 +65,7 @@ def upper_bound(n):
     return sum_digit_counts + remainder
 
 
-def guess_1(n):
+def guess_1(n: int) -> int:
     if n == 0:
         return 0
     exp = log(n, 10)
@@ -73,7 +73,7 @@ def guess_1(n):
     return round(ret)
 
 
-def guess_2(n):
+def guess_2(n: int) -> int:
     if n == 0:
         return 0
     digits = map(int, reversed(str(n)))
@@ -83,7 +83,7 @@ def guess_2(n):
     return sum_guesses
 
 
-def count_previous_runs_place(n, exponent):
+def count_previous_runs_place(n: int, exponent: int) -> int:
     """
     The 10**0 place has runs of length 10**0 every 10**1 starting at 0
     The 10**1 place has runs of length 10**1 every 10**2 starting at 10**1
@@ -108,7 +108,7 @@ def count_previous_runs_place(n, exponent):
     return count_ones_previous_runs
 
 
-def guess_3(n):
+def guess_3(n) -> int:
     """Counts the ones in ony previous ones"""
     digits = list(reversed(str(n)))
     place_counts = [
@@ -118,9 +118,14 @@ def guess_3(n):
     return sum_place_counts
 
 
+def count_current_run(n: int, exponent: int) -> int:
+    # TODO 2024-10-11
+    pass
+
+
 def guess_4(n):
     """Add the ones in the current run to the lower bound set by guess_3"""
-    # TODO: here
+    # TODO 2024-10-11
     pass
 
 

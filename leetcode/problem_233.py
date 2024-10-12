@@ -83,6 +83,47 @@ def guess_2(n):
     return sum_guesses
 
 
+def count_previous_runs_place(n, exponent):
+    """
+    The 10**0 place has runs of length 10**0 every 10**1 starting at 0
+    The 10**1 place has runs of length 10**1 every 10**2 starting at 10**1
+    The 10**2 place has runs of length 10**2 every 10**3 starting at 10**2
+
+
+    Put another way
+
+    Every 10**1 contributes a run of length 1 in the 10**0 place
+    A RUN is a sequence of consecutive values of n each of which the digit in the
+    EXPONENT place is 1
+    A chunk has one run
+    """
+    # if n <= 10**exponent:
+    #     raise ValueError(f"This function is only valid for n>=10**(exponent+1)")
+    if exponent == 0:
+        return n // 10
+    run_length = 10**exponent
+    chunk_length = 10 ** (exponent + 1)
+    num_chunks = (n) // chunk_length
+    count_ones_previous_runs = num_chunks * run_length
+    return count_ones_previous_runs
+
+
+def guess_3(n):
+    """Counts the ones in ony previous ones"""
+    digits = list(reversed(str(n)))
+    place_counts = [
+        count_previous_runs_place(n, exponent) for exponent, _ in enumerate(digits)
+    ]
+    sum_place_counts = sum(place_counts)
+    return sum_place_counts
+
+
+def guess_4(n):
+    """Add the ones in the current run to the lower bound set by guess_3"""
+    # TODO: here
+    pass
+
+
 class Solution:
     def countDigitOne(self, n: int) -> int:
         pass
@@ -97,16 +138,15 @@ def generate_tables():
             diff = None
             for index, expected in enumerate(islice(naive(), 10**6)):
                 n = index + 1
-                guess = guess_2(n)
+                # guess = guess_2(n)
+                guess = guess_3(n)
                 bound = upper_bound(n)
                 # guess2 = guess_2(n)
                 diff_next = expected - guess
                 diffdiff = diff_next - diff if diff is not None else 0
                 diff = diff_next
                 ratio = guess / expected
-                f.write(
-                    f"{n}\t{expected}\t{bound}\t{guess}\t{diff}\t{diffdiff}\t{ratio}\n"
-                )
+                f.write(f"{n}\t{expected}\t{guess}\t{diff}\t{diffdiff}\t{ratio}\n")
                 f2.write(f"{diffdiff} ")
 
 
@@ -131,11 +171,30 @@ def generate_ones(n):
             f.write(f"{i}\n")
 
 
+def test_count_previous_runs_place():
+    cases = [
+        (10, 0, 1),
+        (100, 0, 10),
+        (100, 1, 10),
+        (200, 1, 20),
+        (300, 1, 30),
+    ]
+    for n, exponent, expected in cases:
+        result = count_previous_runs_place(n, exponent=exponent)
+        print(
+            "PASS" if result == expected else "FAIL",
+            f"{n=} {exponent=} {expected=} == {result=}",
+        )
+
+
 def main():
     if "generate" in sys.argv:
         generate_tables()
     if "ones" in sys.argv:
-        generate_ones(10000)
+        generate_ones(10**5)
+    if "test" in sys.argv:
+        test_count_previous_runs_place()
+    test_count_previous_runs_place()
     # print(guess_2(1234))
     upper_bound(1234)
 

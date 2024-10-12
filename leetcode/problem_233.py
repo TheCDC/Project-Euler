@@ -23,6 +23,7 @@ https://oeis.org/A094798
 """
 
 from itertools import islice, count, accumulate
+from functools import cache
 from math import log
 from utils import directory_temp
 import sys
@@ -119,7 +120,17 @@ def guess_3(n) -> int:
 
 
 def count_current_run(n: int, exponent: int) -> int:
-    # TODO 2024-10-11
+    # TODO 2024-10-11 How can you know where you are in a run for a given digit place?
+    # the 10**0 place goes [1,2), [11,12), ...
+    # the 10**1 place goes [10,20), [110,120), ...
+    # the 10**2 place goes [100,200), [1100,1200), ...
+
+    # MODULAR ARITHMETIC will be key in this step.
+    """
+    for exp=e
+    look for
+    """
+
     pass
 
 
@@ -127,6 +138,42 @@ def guess_4(n):
     """Add the ones in the current run to the lower bound set by guess_3"""
     # TODO 2024-10-11
     pass
+
+
+def countDigitOne(n: int) -> int:
+    # Use lru_cache decorator to memoize the results of the recursive calls
+    @cache
+    def dfs(position, count_ones, is_limit):
+        # Base case: if no more digits to process, return the count of ones found
+        if position == 0:
+            return count_ones
+        # Determine the upper bound for the current digit.
+        # If is_limit is True, the upper bound is the current digit in the number.
+        # Otherwise, it is 9 (the maximum value for a digit).
+        upper_bound = digits[position] if is_limit else 9
+        # Initialize the answer for this position
+        ans = 0
+        # Iterate over all possible digits for this position
+        for digit in range(upper_bound + 1):
+            # Calculate the answer recursively. Increase the count if the current digit is 1.
+            # Limit flag is carried over and set to True if we reached the upper_bound.
+            ans += dfs(
+                position - 1,
+                count_ones + (digit == 1),
+                is_limit and digit == upper_bound,
+            )
+        return ans
+
+    # Convert the number to a list of its digits, reversed.
+    # digits = [0] * 12
+    # length = 0
+    # while n:
+    #     digits[length + 1] = n % 10  # Store the digit
+    #     n //= 10  # Move to the next digit
+    #     length += 1
+    digits = [0] + list(map(int, reversed(str(n))))
+    # Invoke the recursive DFS function starting with the most significant digit
+    return dfs(len(digits) - 1, 0, True)
 
 
 class Solution:
@@ -202,6 +249,7 @@ def main():
     test_count_previous_runs_place()
     # print(guess_2(1234))
     upper_bound(1234)
+    print(countDigitOne(11))
 
 
 if __name__ == "__main__":

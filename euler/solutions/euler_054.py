@@ -46,7 +46,6 @@ How many hands does Player 1 win?
 
 from collections import Counter
 from euler.solutions.utils import TimingContext
-from itertools import combinations
 from pathlib import Path
 from typing import Callable
 
@@ -58,11 +57,11 @@ HANDS_FILE_TEST_2 = Path(__file__).parent / "resources" / "poker-test2.txt"
 
 
 def is_card(s: str) -> bool:
-    return s[-1] in SUITS and s[:-1] in VALUES
+    return s[-1] in SUITS and s[0] in VALUES
 
 
 def str_to_card(s: str) -> tuple[str]:
-    return (s[:-1], s[-1])
+    return (s[0], s[-1])
 
 
 def card_value_str(s: str) -> int:
@@ -188,6 +187,26 @@ funcs_rank: list[Callable] = [
 ]
 
 
+def test():
+    cases = [
+        ("5H 5C 6S 7S KD 2C 3S 8S 8D TD", 1),
+        ("5D 8C 9S JS AC 2C 5C 7D 8S QH", 0),
+        ("2D 9C AS AH AC 3D 6D 7D TD QD ", 1),
+        ("4D 6S 9H QH QC 3D 6D 7H QD QS", 0),
+        ("2H 2D 4C 4D 4S 3C 3D 3S 9S 9D", 0),
+    ]
+    for c in cases:
+        l = line(c[0])
+        w = c[1]
+        # print(list(list(rank_hand(h)) for h in l))
+        ww = winner(l[0], l[1])
+        # print()
+        try:
+            assert w == ww, f"w != ww"
+        except AssertionError:
+            winner(l[0], l[1], debug=True)
+
+
 def rank_hand(hand: list[str]):
     for index, f in enumerate(funcs_rank):
         rank_value = f(hand)
@@ -195,12 +214,12 @@ def rank_hand(hand: list[str]):
             yield index, rank_value
 
 
-def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
+def winner(hand_a: list[str], hand_b: list[str], index: int = None, debug=False) -> int:
     ranks_hand_a = list(rank_hand(hand_a))
     ranks_hand_b = list(rank_hand(hand_b))
     # high card
     # maxranks = (max(t[1] for t in ranks_hand_a), max(t[1] for t in ranks_hand_b))
-    winner_rank = None
+    winner_by_rank = None
     if ranks_hand_a and ranks_hand_b:
         rank_index_max_a = max(
             (rank_index, value) for rank_index, value in ranks_hand_a
@@ -209,21 +228,21 @@ def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
             (rank_index, value) for rank_index, value in ranks_hand_b
         )
         if rank_index_max_a[0] > rank_index_max_b[0]:
-            winner_rank = 0
+            winner_by_rank = 0
         elif rank_index_max_a[0] < rank_index_max_b[0]:
-            winner_rank = 1
+            winner_by_rank = 1
         elif rank_index_max_a[0] == rank_index_max_b[0]:
             if rank_index_max_a[1] > rank_index_max_b[1]:
-                winner_rank = 0
+                winner_by_rank = 0
             elif rank_index_max_a[1] < rank_index_max_b[1]:
-                winner_rank = 1
+                winner_by_rank = 1
             elif rank_index_max_a[1] == rank_index_max_b[1]:
                 pass
 
     elif ranks_hand_a:
-        winner_rank = 0
+        winner_by_rank = 0
     elif ranks_hand_b:
-        winner_rank = 1
+        winner_by_rank = 1
     highest_cards_pairs = [
         (a, b)
         for a, b in reversed(
@@ -245,19 +264,22 @@ def winner(hand_a: list[str], hand_b: list[str], index: int = None) -> int:
         winner_high_card = 0
     if high_card_winner_pair[0] < high_card_winner_pair[1]:
         winner_high_card = 1
-    print(
-        index if index is not None else "",
-        hand_a,
-        hand_b,
-        winner_rank if winner_rank is not None else "x",
-        winner_high_card,
-        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
-        [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
-        VALUES[high_card(hand_a) - 1],
-        VALUES[high_card(hand_b) - 1],
-    )
-    if winner_rank:
-        return winner_rank
+    if debug:
+        print(
+            index if index is not None else "",
+            hand_a,
+            hand_b,
+            "winner by rank",
+            winner_by_rank if winner_by_rank is not None else "x",
+            "high card winning player",
+            winner_high_card,
+            [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_a],
+            [(funcs_rank[t[0]].__name__, VALUES[t[1] - 1]) for t in ranks_hand_b],
+            VALUES[high_card(hand_a) - 1],
+            VALUES[high_card(hand_b) - 1],
+        )
+    if winner_by_rank is not None:
+        return winner_by_rank
     # if len(set(highest_cards)) == 1:
     #     print(highest_cards_pairs)
     #     raise Exception(set(VALUES[(c - 1)] for c in highest_cards))
@@ -291,16 +313,17 @@ def solve(filepath: Path, debug=False):
 
 
 def main():
-
+    test()
+    # quit()
     with TimingContext() as tc:
         s = solve(HANDS_FILE)
-        print(s, tc.get_duration())
+        print("TARGET DATA", s, tc.get_duration())
     with TimingContext() as tc:
         s = solve(HANDS_FILE_TEST)
-        print(s, tc.get_duration())
+        print("TEST DATA", s, tc.get_duration())
     with TimingContext() as tc:
         s = solve(HANDS_FILE_TEST_2)
-        print(s, tc.get_duration())
+        print("TEST DATA 2", s, tc.get_duration())
 
 
 if __name__ == "__main__":

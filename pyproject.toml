@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "project-euler"
+name = "euler"
 version = "0.1.0"
 description = ""
 authors = ["Christopher Chen <christopher.chen1995@gmail.com>"]

@@ -55,8 +55,11 @@ class MyFraction:
     def reduce(self):
         numer_component_wholes = self.numerator // self.denominator
         numer_component_residue = self.numerator % self.denominator
-        frac_reduced = reduce_fraction((numer_component_residue, self.denominator))
-        self.numerator = numer_component_wholes * self.denominator + frac_reduced[0]
+        numer_reduced, denom_reduced = map(
+            int, reduce_fraction((numer_component_residue, self.denominator))
+        )
+        self.numerator = numer_component_wholes * denom_reduced + numer_reduced
+        self.denominator = denom_reduced
 
         return self
 

@@ -30,6 +30,7 @@ class MyFraction:
     def __init__(self, numerator: int, denominator: int):
         self.numerator = numerator
         self.denominator = denominator
+        self.reduce()
         pass
 
     def __add__(self, other: "MyFraction"):
@@ -47,15 +48,16 @@ class MyFraction:
         return self * MyFraction(other.denominator, other.numerator)
 
     def __mul__(self, other: "MyFraction"):
-        # TODO: reduce fraction using prime factors
         return MyFraction(
             self.numerator * other.numerator, self.denominator * other.denominator
         )
 
     def reduce(self):
-        self.numerator, self.denominator = map(
-            int, reduce_fraction((self.numerator, self.denominator))
-        )
+        numer_component_wholes = self.numerator // self.denominator
+        numer_component_residue = self.numerator % self.denominator
+        frac_reduced = reduce_fraction((numer_component_residue, self.denominator))
+        self.numerator = numer_component_wholes * self.denominator + frac_reduced[0]
+
         return self
 
 
@@ -68,18 +70,18 @@ def v1(iterations=1):
 
 def v2():
     f = Fraction(3, 2)
-    yield f.reduce()
+    yield f
     while True:
         f = Fraction(1, 1) + Fraction(1, 1) / (Fraction(1, 1) + f)
-        yield f.reduce()
+        yield f
 
 
 def v3():
     f = MyFraction(3, 2)
-    yield f.reduce()
+    yield f
     while True:
         f = MyFraction(1, 1) + MyFraction(1, 1) / (MyFraction(1, 1) + f)
-        yield f.reduce()
+        yield f
 
 
 def test():
@@ -102,7 +104,7 @@ def main():
         print(v1(i))
     with TimingContext() as tc:
         s = 0
-        for frac, index in zip(v2(), range(1000)):
+        for frac, index in zip(v3(), range(1000)):
             print(frac, index, len(str(frac.numerator)), len(str(frac.denominator)))
             if len(str(frac.numerator)) > len(str(frac.denominator)):
                 s += 1

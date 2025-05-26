@@ -23,7 +23,7 @@ numerator with more digits than denominator?
 """
 
 from fractions import Fraction
-from euler.solutions.utils import TimingContext, primeFactors, numprod, reduce_fraction
+from euler.solutions.utils import TimingContext, reduce_fraction, gcd
 
 
 class MyFraction:
@@ -53,14 +53,16 @@ class MyFraction:
         )
 
     def reduce(self):
-        numer_component_wholes = self.numerator // self.denominator
-        numer_component_residue = self.numerator % self.denominator
-        numer_reduced, denom_reduced = map(
-            int, reduce_fraction((numer_component_residue, self.denominator))
-        )
-        self.numerator = numer_component_wholes * denom_reduced + numer_reduced
-        self.denominator = denom_reduced
-
+        # numer_component_wholes = self.numerator // self.denominator
+        # numer_component_residue = self.numerator % self.denominator
+        # numer_reduced, denom_reduced = map(
+        #     int, reduce_fraction((numer_component_residue, self.denominator))
+        # )
+        # self.numerator = numer_component_wholes * denom_reduced + numer_reduced
+        # self.denominator = denom_reduced
+        my_gcd = gcd(self.numerator, self.denominator)
+        self.numerator //= my_gcd
+        self.denominator //= my_gcd
         return self
 
 
@@ -108,7 +110,8 @@ def main():
     with TimingContext() as tc:
         s = 0
         for frac, index in zip(v3(), range(1000)):
-            print(frac, index, len(str(frac.numerator)), len(str(frac.denominator)))
+            if index % 1000 / 100 == 0:
+                print(frac, index, len(str(frac.numerator)), len(str(frac.denominator)))
             if len(str(frac.numerator)) > len(str(frac.denominator)):
                 s += 1
         print(s, tc.get_duration())

@@ -4,3 +4,5 @@ bin/*/*.build
 bin/*/*.exe
 bin/*/*.txt
 .vscode/*
+leetcode/temp/*
+!leetcode/temp/.gitignore

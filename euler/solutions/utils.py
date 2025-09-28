@@ -8,6 +8,15 @@ from collections import Counter
 from timeit import default_timer
 
 
+def gcd(a: int, b: int):
+    big = max(a, b)
+    small = min(a, b)
+    while big != small:
+        diff = big - small
+        big, small = max(diff, small), min(diff, small)
+    return big
+
+
 @lru_cache(maxsize=1000000)
 def factorial(n):
     if n <= 1:
@@ -185,6 +194,7 @@ class TimingContext:
 
 def main():
     print(numrepr(13456783, 2))
+    print(gcd(2, 1000000000000000000000))
 
 
 if __name__ == "__main__":

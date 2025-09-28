@@ -4,11 +4,12 @@ from euler.solutions.utils import TimingContext
 def solve():
     big = 0
 
-    for first in range(100, 1000):
-        for second in range(100, 1000):
+    for first in range(1000, 99, -1):
+        for second in range(1000, 99, -1):
             product = first * second
             if str(product) == str(product)[::-1]:
                 if product > big:
+                    print(product, first, second)
                     big = product
                     # print(big)
 

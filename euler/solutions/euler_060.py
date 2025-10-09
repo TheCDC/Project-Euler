@@ -12,9 +12,9 @@ from euler.solutions.utils import isPrime
 def check(tup: tuple[int], debug=False):
     for a, b in combinations(tup, 2):
         if not isPrime(int(str(a) + str(b))):
-            continue
+            return False
         if not isPrime(int(str(b) + str(a))):
-            continue
+            return False
         if debug:
             print(a, b)
     return True
@@ -46,6 +46,79 @@ def sanity():
     print(list(partitions(23)))
 
 
+def clique3(edges):
+    for a in edges:
+        for b in edges.get(a, []):
+            if not a in edges.get(b, []):
+                continue
+            for c in edges.get(b, []):
+                if not c in edges[a]:
+                    continue
+                if not c in edges[b]:
+                    continue
+                yield a, b, c
+
+
+def clique4(edges):
+    memory = set()
+    for a in edges:
+        for b in edges.get(a, []):
+            if not a in edges.get(b, []):
+                continue
+            for c in edges.get(b, []):
+                if not c in edges.get(a, []):
+                    continue
+                if not c in edges.get(b, []):
+                    continue
+                for d in edges.get(c, []):
+                    if not d in edges.get(a, []):
+                        continue
+                    if not d in edges.get(b, []):
+                        continue
+                    if not d in edges.get(c, []):
+                        continue
+                    fs = frozenset([a, b, c, d])
+                    if fs in memory:
+                        continue
+                    memory.add(fs)
+                    yield a, b, c, d
+
+
+def clique5(edges):
+    memory = set()
+    for a in edges:
+        for b in edges.get(a, []):
+            if not a in edges.get(b, []):
+                continue
+            for c in edges.get(b, []):
+                if not c in edges.get(a, []):
+                    continue
+                if not c in edges.get(b, []):
+                    continue
+                for d in edges.get(c, []):
+                    if not d in edges.get(a, []):
+                        continue
+                    if not d in edges.get(b, []):
+                        continue
+                    if not d in edges.get(c, []):
+                        continue
+                    for e in edges.get(d, []):
+                        if not e in edges.get(a, []):
+                            continue
+                        if not e in edges.get(b, []):
+                            continue
+                        if not e in edges.get(c, []):
+                            continue
+                        if not e in edges.get(d, []):
+                            continue
+
+                        fs = frozenset([a, b, c, d, e])
+                        if fs in memory:
+                            continue
+                        memory.add(fs)
+                        yield a, b, c, d, e
+
+
 def v1(n=1000):
     """Generate edges between primes representing prime concatenations"""
     edges = dict()
@@ -55,18 +128,63 @@ def v1(n=1000):
             if a == b:
                 continue
             edges.update({a: edges.get(a, set()) | {b}})
-            # edges.update({b: edges.get(b, set()) | {a}})
             # print(i, p, a, b)
     return edges
 
 
 def v2():
-    pass
+    """Try to find 2-cliques in edges"""
+    edges = v1()
+    return set(
+        [
+            frozenset((a, b))
+            for a in edges
+            for b in edges[a]
+            if b in edges and a in edges[b]
+        ]
+    )
+
+
+def v3():
+    """Attempt to find 3-cliques in edges"""
+    edges = v1(1000000)
+    print("3-cliques")
+    for c in clique3(edges):
+        cc = check(c)
+        if cc:
+            print(cc, c)
+    print("4-cliques")
+    for c in clique4(edges):
+        cc = check(c)
+        if cc:
+            print(cc, c)
+    print("5-cliques")
+    for c in clique5(edges):
+        cc = check(c)
+        if cc:
+            print(cc, c)
+    # for a in edges:
+    #     for b in edges.get(a, []):
+    #         if not a in edges.get(b, []):
+    #             continue
+    #         for c in edges.get(b, []):
+    #             if not c in edges[a]:
+    #                 continue
+    #             if not c in edges[b]:
+    #                 continue
+    #             print(
+    #                 check((a, b, c)),
+    #                 a,
+    #                 b,
+    #                 c,
+    #             )
 
 
 def main():
     sanity()
-    print(v1())
+    # print(v1())
+    # print(v2())
+    print(v3())
 
 
 if __name__ == "__main__":

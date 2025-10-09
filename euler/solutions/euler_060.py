@@ -84,10 +84,10 @@ def clique4(edges):
                     yield a, b, c, d
 
 
-def clique5(edges):
+def clique5(edges, target=None):
     """TODO: look only for cliques containing the latest primes added to the edges."""
     memory = set()
-    for a in edges:
+    for a in [target] if target else edges:
         for b in edges.get(a, []):
             if not a in edges.get(b, []):
                 continue
@@ -120,7 +120,7 @@ def clique5(edges):
                         yield a, b, c, d, e
 
 
-def v1(n=1000):
+def v1(n=1000, on_update: callable = None):
     """Generate edges between primes representing prime concatenations"""
     edges = dict()
     for i in range(n):
@@ -130,6 +130,9 @@ def v1(n=1000):
                 continue
             edges.update({a: edges.get(a, set()) | {b}})
             # print(i, p, a, b)
+            if on_update:
+                # print("call update on", a)
+                on_update(edges, a)
     return edges
 
 
@@ -181,11 +184,17 @@ def v3():
     #             )
 
 
+def v4():
+
+    edges = v1(10000000, on_update=clique5)
+
+
 def main():
     sanity()
     # print(v1())
     # print(v2())
-    print(v3())
+    # print(v3())
+    v4()
 
 
 if __name__ == "__main__":

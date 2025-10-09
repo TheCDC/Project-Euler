@@ -85,6 +85,7 @@ def clique4(edges):
 
 
 def clique5(edges):
+    """TODO: look only for cliques containing the latest primes added to the edges."""
     memory = set()
     for a in edges:
         for b in edges.get(a, []):

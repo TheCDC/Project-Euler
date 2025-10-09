@@ -6,7 +6,7 @@
 """
 
 from itertools import combinations
-from euler.solutions.utils import isPrime
+from euler.solutions.utils import isPrime, TimingContext, prime_sieve
 
 
 def check(tup: tuple[int], debug=False):
@@ -21,18 +21,20 @@ def check(tup: tuple[int], debug=False):
 
 
 def partitions(i: int):
+    if not isPrime(i):
+        return
     si = str(i)
     for i in range(len(si)):
-        a = si[:i]
-        b = si[i:]
-        if len(a) == 0 or len(b) == 0:
+        sa = si[:i]
+        sb = si[i:]
+        if len(sa) == 0 or len(sb) == 0:
             continue
-        ia = int(a)
-        ib = int(b)
+        ia = int(sa)
+        ib = int(sb)
         if isPrime(ia) and isPrime(ib):
-            if isPrime(int(a + b)):
+            if isPrime(int(sa + sb)):
                 yield ia, ib
-            if isPrime(int(b + a)):
+            if isPrime(int(sb + sa)):
                 yield ib, ia
 
 
@@ -84,7 +86,7 @@ def clique4(edges):
                     yield a, b, c, d
 
 
-def clique5(edges, target=None):
+def clique5(edges: dict, target: int = None):
     """TODO: look only for cliques containing the latest primes added to the edges."""
     memory = set()
     for a in [target] if target else edges:
@@ -96,6 +98,8 @@ def clique5(edges, target=None):
                     continue
                 if not c in edges.get(b, []):
                     continue
+                if a not in edges.get(c, []) or b not in edges.get(c, []):
+                    continue
                 for d in edges.get(c, []):
                     if not d in edges.get(a, []):
                         continue
@@ -103,6 +107,13 @@ def clique5(edges, target=None):
                         continue
                     if not d in edges.get(c, []):
                         continue
+                    if (
+                        a not in edges.get(d, [])
+                        or b not in edges.get(d, [])
+                        or c not in edges.get(d, [])
+                    ):
+                        continue
+                    # print("4-clique", a, b, c, d)
                     for e in edges.get(d, []):
                         if not e in edges.get(a, []):
                             continue
@@ -112,7 +123,13 @@ def clique5(edges, target=None):
                             continue
                         if not e in edges.get(d, []):
                             continue
-
+                        if (
+                            a not in edges.get(e, [])
+                            or b not in edges.get(e, [])
+                            or c not in edges.get(e, [])
+                            or d not in edges.get(e, [])
+                        ):
+                            continue
                         fs = frozenset([a, b, c, d, e])
                         if fs in memory:
                             continue
@@ -131,7 +148,7 @@ def v1(n=1000, on_update: callable = None):
             edges.update({a: edges.get(a, set()) | {b}})
             # print(i, p, a, b)
             if on_update:
-                # print("call update on", a)
+                print("call update on", a)
                 on_update(edges, a)
     return edges
 
@@ -185,8 +202,31 @@ def v3():
 
 
 def v4():
-
-    edges = v1(10000000, on_update=clique5)
+    print(list(prime_sieve(32)))
+    memory = set()
+    smallest = None
+    with TimingContext() as tc:
+        edges = dict()
+        for index, n in enumerate(prime_sieve(10000000)):
+            if index % 100000 == 0:
+                print("progress", n, tc.get_duration())
+            for p in partitions(n):
+                a, b = p
+                if a == b:
+                    continue
+                edges.update({a: edges.get(a, set()) | {b}})
+                # print(i, p, a, b)
+                cliques = list(clique5(edges, a))
+                if cliques:
+                    # print("5-CLIQUE FOUND!", cliques)
+                    for c in cliques:
+                        fsc = frozenset(sorted(c))
+                        if fsc not in memory:
+                            memory.add(fsc)
+                            if smallest is None or sum(fsc) < smallest:
+                                smallest = sum(fsc)
+                                print(smallest, check(fsc), *sorted(fsc))
+                            yield fsc
 
 
 def main():
@@ -194,7 +234,7 @@ def main():
     # print(v1())
     # print(v2())
     # print(v3())
-    v4()
+    print(list(v4()))
 
 
 if __name__ == "__main__":

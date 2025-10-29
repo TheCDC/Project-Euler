@@ -11,12 +11,17 @@ from euler.solutions.utils import isPrime, TimingContext, prime_sieve
 
 def check(tup: tuple[int], debug=False):
     for a, b in combinations(tup, 2):
-        if not isPrime(int(str(a) + str(b))):
+        ab = int(str(a) + str(b))
+        if not isPrime(ab):
+            if debug:
+                print(a, b, ab)
             return False
-        if not isPrime(int(str(b) + str(a))):
+        ba = int(str(b) + str(a))
+        if not isPrime(ba):
+            if debug:
+                print(a, b, ba)
+
             return False
-        if debug:
-            print(a, b)
     return True
 
 
@@ -152,6 +157,58 @@ def clique5(edges: dict, target: int = None):
                         yield a, b, c, d, e
 
 
+def clique5sets(edges: dict, target: int = None):
+    """TODO: look only for cliques containing the latest primes added to the edges."""
+    memory = set()
+    for a in set([target]) if target else edges:
+        a_neighbors: set = edges.get(a, set())
+        for b in a_neighbors:  # a points to b
+            b_neighbors = edges.get(b, set())
+            if not a in b_neighbors:
+                continue
+            ab_neighbors = a_neighbors & b_neighbors
+            for c in ab_neighbors:
+                c_neighbors = edges.get(c, set())
+                if not {a, b} <= c_neighbors:
+                    continue
+                abc_neighbors = ab_neighbors & edges.get(c, set())
+                for d in abc_neighbors:
+                    d_neighbors = edges.get(d, set())
+                    if not {a, b, c} <= d_neighbors:
+                        continue
+                    abcd_neighbors = abc_neighbors & edges.get(d, set())
+                    for e in abcd_neighbors:
+                        abcde_neighbors = abcd_neighbors & edges.get(e, set())
+                        if abcd_neighbors:
+                            fs = frozenset(abcde_neighbors)
+                            if fs in memory:
+                                continue
+                            memory.add(fs)
+                            yield a, b, c, d, e
+
+
+def clique_recursive(n: int, node_edges: dict[int, set[int]], current: set = None):
+    def red(a: set, b: set):
+        return a & b
+
+    if n == 0:  # base case
+        yield current
+    if current is None:
+        for n in node_edges:
+            yield from clique_recursive(n - 1, node_edges, set([n]))
+        return
+    edge_sets = list(node_edges.get(e, set()) for e in current)
+    s = None
+    for es in edge_sets:
+        if s is None:
+            s = es
+        s = red(s, es)
+    if s is None:
+        return
+    for i in s:
+        yield from clique_recursive(n - 1, node_edges, current | set([i]))
+
+
 def v1(n=1000, on_update: callable = None):
     """Generate edges between primes representing prime concatenations"""
     edges = dict()
@@ -255,9 +312,43 @@ def v5():
         for a, b in en:
             memory.update({a: memory.get(a, set()) | set([b])})
             cs = list(clique5(memory, a))
+            # print(memory)
+            # quit()
             if cs:
                 print("5-cliques", cs)
     print("primes", len(memory))
+
+
+def v6():
+    memory: dict[int, set[int]] = dict()
+    found = set()
+    target = None
+    for i in range(2000000):
+        en = edges_new(i, memory)
+        for a, b in en:
+            memory.update({a: memory.get(a, set()) | set([b])})
+            # cs = list(clique5sets(memory, a))
+            # # print(memory)
+            # # quit()
+            # if cs:
+            #     for c in cs:
+            #         found.add(frozenset(c))
+            #         if not check(c):
+            #             continue
+            #         snew = sum(c)
+            #         if not target or (snew < target):
+            #             print(snew, c)
+            #             target = snew
+            #     # print("5-cliques", cs)
+    target = None
+    for clique in clique_recursive(5, memory):
+        if len(clique) != 5:
+            continue
+        print(clique, sum(clique))
+        if check(clique) and (not target or (sum(target) > sum(clique))):
+            target = clique
+    print(f"{target=}", sum(target))
+    # print("primes", len(memory))
 
 
 def main():
@@ -266,7 +357,20 @@ def main():
     # print(v2())
     # print(v3())
     # print(list(v4()))
-    v5()
+    v6()
+    print(
+        list(
+            clique_recursive(
+                3,
+                {
+                    1: set([2, 3]),
+                    2: set([1, 3]),
+                    3: set([1, 2]),
+                },
+            )
+        )
+    )
+    # 187 fail
 
 
 if __name__ == "__main__":

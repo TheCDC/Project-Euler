@@ -31,11 +31,26 @@ def partitions(i: int):
             continue
         ia = int(sa)
         ib = int(sb)
-        if isPrime(ia) and isPrime(ib):
+        if (str(ia) == sa and str(ib) == sb) and (isPrime(ia) and isPrime(ib)):
             if isPrime(int(sa + sb)):
                 yield ia, ib
             if isPrime(int(sb + sa)):
                 yield ib, ia
+
+
+def get_edges(n: int):
+    for p in partitions(n):
+        a, b = p
+        if a == b:
+            continue
+        yield a, b
+
+
+def edges_new(n, previous: dict[int, set[int]] = None):
+    previous = previous if previous is not None else dict()
+    for a, b in get_edges(n):
+        if not b in previous.get(a, set()):
+            yield a, b
 
 
 def sanity():
@@ -202,14 +217,18 @@ def v3():
 
 
 def v4():
+    """
+    Iterate over ints
+        for each, generate partitions and edges from partitions
+    """
     print(list(prime_sieve(32)))
     memory = set()
     smallest = None
     with TimingContext() as tc:
         edges = dict()
-        for index, n in enumerate(prime_sieve(10000000)):
-            if index % 100000 == 0:
-                print("progress", n, tc.get_duration())
+        for index, n in enumerate(prime_sieve(1000000)):
+            if index % 10000 == 0:
+                print("progress", index, n, tc.get_duration())
             for p in partitions(n):
                 a, b = p
                 if a == b:
@@ -229,12 +248,25 @@ def v4():
                             yield fsc
 
 
+def v5():
+    memory: dict[int, set[int]] = dict()
+    for i in range(2000000):
+        en = edges_new(i, memory)
+        for a, b in en:
+            memory.update({a: memory.get(a, set()) | set([b])})
+            cs = list(clique5(memory, a))
+            if cs:
+                print("5-cliques", cs)
+    print("primes", len(memory))
+
+
 def main():
     sanity()
     # print(v1())
     # print(v2())
     # print(v3())
-    print(list(v4()))
+    # print(list(v4()))
+    v5()
 
 
 if __name__ == "__main__":
